@@ -111,4 +111,12 @@ for l in range(len(bs)):
                 e3_a_1 = exp_fill_fac.Nielsen_sample(2,bs[l],0.2)
                 results_Wr.append(e3_a_1[8])
                 results_D.append(e3_a_1[3])
-                results_R_vir.append(e3_a_1[7]) 
+                results_R_vir.append(e3_a_1[7])
+                
+                
+results_Wr_r = np.reshape(results_Wr, (5,5,5,5,300))
+results_D_r = np.reshape(results_D, (5,5,5,5,300))
+results_R_vir_r = np.reshape(results_R_vir, (5,5,5,5,300))
+results_r = [results_Wr_r, results_D_r, results_R_vir_r]
+
+np.save('mcmc_2', results_r)
