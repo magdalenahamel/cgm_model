@@ -107,6 +107,7 @@ for l in range(len(bs)):
     for i in range(len(csize)):
         for j in range(len(hs)):
             for k in range(len(hv)):
+                print(l,i,j,k)
                 exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs[j], hv=hv[k])
                 e3_a_1 = exp_fill_fac.Nielsen_sample(2,bs[l],0.2)
                 results_Wr.append(e3_a_1[8])
