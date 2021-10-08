@@ -99,7 +99,8 @@ params = [bs,csize,hs,hv]
 
 
 ### run the model in the parameter grid
-'''results_D = []
+results_Wr = []
+results_D = []
 results_R_vir = []
 
 for l in range(len(bs)):
@@ -110,4 +111,4 @@ for l in range(len(bs)):
                 e3_a_1 = exp_fill_fac.Nielsen_sample(2,bs[l],0.2)
                 results_Wr.append(e3_a_1[8])
                 results_D.append(e3_a_1[3])
-                results_R_vir.append(e3_a_1[7]) '''
+                results_R_vir.append(e3_a_1[7]) 
