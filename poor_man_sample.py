@@ -89,10 +89,10 @@ def prob_hit_pow_law(r, r_vir, prob_rc, rmax, por_r_vir = 0.5):
 
 #### define grids for the poor mans mcmc
 
-bs = np.linspace(0.1,5,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = np.linspace(0.01,2,7) #poner en escala mas separada
-hs = np.linspace(5,40,7) #bajar un poco para que no sea un  1,10,20
-hv = np.linspace(0, 50,7) #bajar maximo a 100
+bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+csize = np.linspace(0.01,1,7) #poner en escala mas separada
+hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
+hv = np.linspace(0, 20,7) #bajar maximo a 100
 
 params = [bs,csize,hs,hv]
 
@@ -120,4 +120,4 @@ results_D_r = np.reshape(results_D, (7,7,7,7,300))
 results_R_vir_r = np.reshape(results_R_vir, (7,7,7,7,300))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 
-np.save('mcmc_3', results_r)
+np.save('mcmc_4', results_r)
