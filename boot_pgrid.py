@@ -24,7 +24,7 @@ W_r_churchill_no_upper = W_r_churchill_iso[~con_upper]
 D_R_vir_churchill_no_upper = D_R_vir_churchill_iso[~con_upper]
 e_Wr_no_upper = e_Wr[~con_upper]
 
-all_sample = np.concatenate((no_upper_sample, upper_sample))
+all_d = np.concatenate((D_R_vir_churchill_no_upper, D_R_vir_churchill_upper))
 
 
 def ks2d2s(x1, y1, x2, y2, nboot=None, extra=False):
