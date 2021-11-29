@@ -10,6 +10,22 @@ from scipy.stats import genextreme
 
 __all__ = ['ks2d2s', 'estat', 'estat2d']
 
+churchill_iso = pd.read_csv('Churchill_iso_full.txt', error_bad_lines=False, delim_whitespace=True)
+W_r_churchill_iso = churchill_iso['Wr'].to_numpy()
+D_R_vir_churchill_iso = churchill_iso['etav'].to_numpy()
+e_Wr = churchill_iso['eWr'].to_numpy()
+
+con_upper = (e_Wr == -1.)
+W_r_churchill_upper = W_r_churchill_iso[con_upper]
+D_R_vir_churchill_upper = D_R_vir_churchill_iso[con_upper]
+e_Wr_upper = e_Wr[con_upper]
+
+W_r_churchill_no_upper = W_r_churchill_iso[~con_upper]
+D_R_vir_churchill_no_upper = D_R_vir_churchill_iso[~con_upper]
+e_Wr_no_upper = e_Wr[~con_upper]
+
+all_sample = np.concatenate((no_upper_sample, upper_sample))
+
 
 def ks2d2s(x1, y1, x2, y2, nboot=None, extra=False):
     '''Two-dimensional Kolmogorov-Smirnov test on two samples. 
@@ -166,7 +182,7 @@ results_r_3 = np.load('mcmc_3.npy')
 
 results_r_3.shape
 
-def getpgrid_boot(modelgrid, comparison_data, boot = 1000):
+def getpgrid_boot(modelgrid, boot = 1000):
         #Determine the grid in terms of deviation from sigma
         pgrid=np.zeros((7,7,7,7)) + 1.0
          #Loop through each constraint
@@ -193,6 +209,6 @@ def getpgrid_boot(modelgrid, comparison_data, boot = 1000):
                         
     
         return pgrid
-prob_3_boot = getpgrid_boot(results_r_3, magii_comp)
+prob_3_boot = getpgrid_boot(results_r_3)
     
 np.save('pgrid_boot_3', pgrid)
