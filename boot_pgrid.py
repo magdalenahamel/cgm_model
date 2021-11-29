@@ -192,7 +192,6 @@ def getpgrid_boot(modelgrid, comparison_data, boot = 1000):
                         
     
         return pgrid
+prob_3_boot = getpgrid_boot(results_r_3, magii_comp)
     
-    prob_3_boot = getpgrid_boot(results_r_3, magii_comp)
-    
-    np.save('pgrid_boot_3', pgrid)
+np.save('pgrid_boot_3', pgrid)
