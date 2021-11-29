@@ -1,7 +1,8 @@
+from __future__ import division
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
-from __future__ import division
+
 from numpy import random
 from scipy.spatial.distance import pdist, cdist
 from scipy.stats import kstwobign, pearsonr
