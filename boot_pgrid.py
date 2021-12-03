@@ -168,7 +168,20 @@ def energy(x, y, method='log'):
     return z
 
 
-bs_3 = np.linspace(0.1,5,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+bs_2 = np.linspace(0.1,5,7) 
+csize_2 = np.linspace(0.01,2,7) 
+hs_2 = np.linspace(5,40,7) 
+hv_2 = np.linspace(0, 50,7) 
+
+params_2 = [bs_2,csize_2,hs_2,hv_2]
+
+params_name_2 = ['f_v', 'cloud size', 'disc height', 'velocity scale height']
+
+results_r_2 = np.load('mcmc_2.npy')
+
+
+
+'''bs_3 = np.linspace(0.1,5,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
 csize_3 = np.linspace(0.01,2,7) #poner en escala mas separada
 hs_3 = np.linspace(5,40,7) #bajar un poco para que no sea un  1,10,20
 hv_3 = np.linspace(0, 50,7) #bajar maximo a 100
@@ -180,7 +193,7 @@ params_name_3 = ['f_v', 'cloud size', 'disc height', 'velocity scale height']
 results_r_3 = np.load('mcmc_3.npy')
 
 
-results_r_3.shape
+results_r_3.shape'''
 
 def getpgrid_boot(modelgrid, boot = 1000):
         #Determine the grid in terms of deviation from sigma
@@ -209,6 +222,6 @@ def getpgrid_boot(modelgrid, boot = 1000):
                         
     
         return pgrid
-prob_3_boot = getpgrid_boot(results_r_3)
+prob_2_boot = getpgrid_boot(results_r_2)
     
-np.save('pgrid_boot_3', pgrid)
+np.save('pgrid_boot_2', prob_2_boot)
