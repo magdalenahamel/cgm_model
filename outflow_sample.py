@@ -515,7 +515,8 @@ def get_sample(N,theta_max,theta_min,r_0,size,vel):
         ews_empty.append(ew)
         speci_empty.append(bla1)
         nr_clouds.append(nr)
-        return(ews_empty,speci_empty,nr_clouds)
+        
+    return(ews_empty,speci_empty,nr_clouds)
     #Ds.append(result[0][i][j])
     #MyData[:,j,i] = bla
 
