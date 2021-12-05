@@ -565,5 +565,6 @@ for i in range(2):
                 for m in range(2):
                     print(i,j,k,l,m)
                     bla = get_sample(Ns[i],theta_maxs[j],0,r_0[k],size[l],vel[m])
+                    results.append(bla)
 
 np.save('outflows1', results)
