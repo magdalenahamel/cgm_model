@@ -563,7 +563,7 @@ for i in range(len(Ns)):
     bla = get_sample(Ns[i],theta_maxs,0,r_0,size,vel)
     EWs.append(bla[0])
     specs.append(bla[1])
-    nr_clouds.appens(bla[2])
+    nr_clouds.append(bla[2])
     ds_s.append(bla[3])
 
 np.save('out_EW_1', EWs)
