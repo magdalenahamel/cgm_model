@@ -492,16 +492,14 @@ minor_error = np.abs(minor_tpcf['minus_error'].to_numpy() - minor_tpcf['plus_err
 
 vels_wave = (const.c.to('km/s').value * ((lam/ (2796.35 * (1 + 1.29))) - 1))
 
-alphas = np.random.uniform(low=-90, high=-45, size=(500,))
-ds = np.random.uniform(low=1, high=100, size=(500,))
-inclis = np.random.uniform(low=70, high=89, size=(500,))
-
-
 def get_sample(N,theta_max,theta_min,r_0,size,vel):
     ews_empty = []
     Ds_empty = []
     speci_empty = []
     nr_clouds = []
+    alphas = np.random.uniform(low=-90, high=-45, size=(500,))
+    ds = np.random.uniform(low=1, high=100, size=(500,))
+    inclis = np.random.uniform(low=70, high=89, size=(500,))
 
     for i in range(len(alphas)):
 
@@ -516,7 +514,7 @@ def get_sample(N,theta_max,theta_min,r_0,size,vel):
         speci_empty.append(bla1)
         nr_clouds.append(nr)
         
-    return(ews_empty,speci_empty,nr_clouds)
+    return(ews_empty,speci_empty,nr_clouds,ds)
     #Ds.append(result[0][i][j])
     #MyData[:,j,i] = bla
 
@@ -550,22 +548,25 @@ def TPCF(speci_empty):
     return(bla2)
 
 
-Ns = [10**12, 10**16]
-theta_maxs = [30, 60]
-r_0 = [5, 20]
-size = [0.1, 10]
-vel = [50, 400]
+Ns = [10**12, 10**14, 10**16]
+theta_maxs = 30
+r_0 = 10
+size = 0.1
+vel = 200
 
-results = []
+EWs = []
+specs = []
+nr_clouds = []
+ds_s = []
 
+for i in range(len(Ns)):
+    bla = get_sample(Ns[i],theta_maxs,0,r_0,size,vel)
+    EWs.append(bla[0])
+    specs.append(bla[1])
+    nr_clouds.appens(bla[2])
+    ds_s.append(bla[3])
 
-for i in range(2):
-    for j in range(2):
-        for k in range(2):
-            for l in range(2):
-                for m in range(2):
-                    print(i,j,k,l,m)
-                    bla = get_sample(Ns[i],theta_maxs[j],0,r_0[k],size[l],vel[m])
-                    results.append(bla)
-
-np.save('outflows1', results)
+np.save('out_EW_1', EWs)
+np.save('out_specs_1', specs)
+np.save('out_nr_clouds_1', nr_clouds)
+np.save('out_ds_1', ds_s)
