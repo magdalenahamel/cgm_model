@@ -551,22 +551,22 @@ def TPCF(speci_empty):
 Ns = 10**14
 theta_maxs = 80
 r_0 = 10
-size = [0.1, 1, 10]
-vel = 200
+size = 0.1
+vel = [50,200,500]
 
 EWs = []
 specs = []
 nr_clouds = []
 ds_s = []
 
-for i in range(len(size)):
-    bla = get_sample(Ns,theta_maxs,0,r_0,size[i],vel)
+for i in range(len(vel)):
+    bla = get_sample(Ns,theta_maxs,0,r_0,size,vel[i])
     EWs.append(bla[0])
     specs.append(bla[1])
     nr_clouds.append(bla[2])
     ds_s.append(bla[3])
 
-np.save('out_EW_3', EWs)
-np.save('out_specs_3', specs)
-np.save('out_nr_clouds_3', nr_clouds)
-np.save('out_ds_3', ds_s)
+np.save('out_EW_4', EWs)
+np.save('out_specs_4', specs)
+np.save('out_nr_clouds_4', nr_clouds)
+np.save('out_ds_4', ds_s)
