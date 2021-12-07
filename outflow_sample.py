@@ -566,7 +566,7 @@ for i in range(len(theta_maxs)):
     nr_clouds.append(bla[2])
     ds_s.append(bla[3])
 
-np.save('out_EW_4', EWs)
-np.save('out_specs_4', specs)
-np.save('out_nr_clouds_4', nr_clouds)
-np.save('out_ds_4', ds_s)
+np.save('out_EW_5', EWs)
+np.save('out_specs_5', specs)
+np.save('out_nr_clouds_5', nr_clouds)
+np.save('out_ds_5', ds_s)
