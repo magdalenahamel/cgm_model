@@ -8,6 +8,32 @@ from astropy import constants as const
 
 import cgmspec.Sample as sample
 
+from itertools import combinations
+
+def TPCF(speci_empty_t):
+    gauss_specs = []
+    abs_specs = []
+    vels_abs = []
+    for m in range(len(speci_empty_t)):
+        gauss_specj = filtrogauss(45000,0.03,2796.35,speci_empty_t[m])
+        gauss_specs.append(gauss_specj)
+        zabs=0.77086
+        wave = np.arange(lam1,lam2,0.05)
+        vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
+        cond_abs1 = gauss_specj < 0.98
+        cond_abs2 = np.abs(vels_wave) < 1000
+        abs_gauss_spec_major = vels_wave[cond_abs1 & cond_abs2]
+        abs_specs.append(abs_gauss_spec_major)
+    #vels_abs_major_i = [abs(i-j) for i in abs_gauss_spec_major for j in abs_gauss_spec_major if i != j]
+    #vels_abs.append(vels_abs_major_i)
+
+# Convert input list to a numpy array
+    abs_specs_f = np.concatenate(np.asarray(abs_specs))
+    bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
+    bla2 = np.histogram(bla,bins=minor_vel)
+    return(bla2)
+
+
 def log_log(r,a,b):
     return(10**(a) * r**(b))
 
@@ -30,15 +56,6 @@ def chisq(obs, exp, error):
     return np.sum((obs - exp) ** 2 / (error ** 2))
 
 
-def TPCF(spec, vel):
-    cond1 = spec < 0.98
-    cond2 = np.abs(vels_wave) < 1000
-    abs_spec = vel[cond1 & cond2]
-    sub_arr = np.abs(abs_spec[:,None] - abs_spec)
-    N = abs_spec.size
-    rem_idx = np.arange(N)*(N+1)
-    out = np.delete(sub_arr,rem_idx)
-    return(out)
 
 
 from astropy.convolution import convolve, Gaussian1DKernel
@@ -49,12 +66,13 @@ def filtrogauss(R, spec_res, lam_0, flux):
     gausflux = convolve(flux, gauss_kernel)
     return(gausflux)
 
-bs = np.linspace(0.1,20,3) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = np.asarray([0.1, 1, 10]) #poner en escala mas separada
-hs = np.linspace(1,50,3) #bajar un poco para que no sea un  1,10,20
-hv = np.linspace(0, 50,3) #bajar maximo a 100
+bs = np.linspace(0.1,5,7) 
+csize = np.linspace(0.01,2,7) 
+hs = np.linspace(5,40,7) 
+hv = np.linspace(0, 50,7) 
 
 params = [bs,csize,hs,hv]
+
 
 results_TPCF_minor = []
 results_TPCF_major = []
@@ -74,52 +92,12 @@ for l in range(len(bs)):
 
                 specs_minor = e3_a_1[1][cond_minor]
                 specs_major = e3_a_1[1][cond_major]
-
-                gauss_specs_minor = []
-                abs_specs_minor = []
-                vels_abs_minor = []
-
-                gauss_specs_major = []
-                abs_specs_major = []
-                vels_abs_major = []
-
-                for m in range(len(specs_minor)):
-                    gauss_specj = filtrogauss(45000,0.03,2796.35,specs_minor[m])
-                    gauss_specs_minor.append(gauss_specj)
-                    zabs=0.77086
-                    wave = np.arange(4849.58349609375,5098.33349609375+0.125, 0.03)
-                    vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
-                    cond_abs1 = gauss_specj < 0.98
-                    cond_abs2 = np.abs(vels_wave) < 1000
-                    abs_gauss_spec_minor = vels_wave[cond_abs1 & cond_abs2]
-                    abs_specs_minor.append(abs_gauss_spec_minor)
-                    vels_abs_minor_i = [abs(i-j) for i in abs_gauss_spec_minor for j in abs_gauss_spec_minor if i != j]
-                    vels_abs_minor.append(vels_abs_minor_i)
-
-                for m in range(len(specs_major)):
-                    gauss_specj = filtrogauss(45000,0.03,2796.35,specs_major[m])
-                    gauss_specs_major.append(gauss_specj)
-                    zabs=0.77086
-                    wave = np.arange(4849.58349609375,5098.33349609375+0.125, 0.03)
-                    vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
-                    cond_abs1 = gauss_specj < 0.98
-                    cond_abs2 = np.abs(vels_wave) < 1000
-                    abs_gauss_spec_major = vels_wave[cond_abs1 & cond_abs2]
-                    abs_specs_major.append(abs_gauss_spec_major)
-                    vels_abs_major_i = [abs(i-j) for i in abs_gauss_spec_major for j in abs_gauss_spec_major if i != j]
-                    vels_abs_major.append(vels_abs_major_i)
-
-# Convert input list to a numpy array
-
-                out_minor = [item for sublist in vels_abs_minor for item in sublist]
-                out_major = [item for sublist in vels_abs_major for item in sublist]
-
-
-                TPCF_model_minor = np.histogram(out_minor, bins=minor_vel, density=True)
-                TPCF_model_major = np.histogram(out_major, bins=major_vel, density=True)
+                
+                TPCF_model_minor = TPCF(specs_minor)
+                TPCF_model_major = TPCF(specs_major)
 
                 results_TPCF_minor.append(TPCF_model_minor)
                 results_TPCF_major.append(TPCF_model_major)
 
-np.save('TPCF_minor_1', results_TPCF_minor)
-np.save('TPCF_major_1', rresults_TPCF_major)
+np.save('TPCF_minor_2', results_TPCF_minor)
+np.save('TPCF_major_2', rresults_TPCF_major)
