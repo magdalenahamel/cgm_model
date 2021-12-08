@@ -605,7 +605,7 @@ nr_clouds = []
 ds_s = []
 
 for i in range(len(theta_maxs)):
-    bla = get_sample(Ns,theta_maxs[1],0,r_0,size,vel)
+    bla = get_sample(Ns,theta_maxs[i],0,r_0,size,vel)
     EWs.append(bla[0])
     specs.append(bla[1])
     nr_clouds.append(bla[2])
