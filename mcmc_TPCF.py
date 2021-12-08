@@ -18,8 +18,10 @@ def TPCF(speci_empty_t):
         gauss_specj = filtrogauss(45000,0.03,2796.35,speci_empty_t[m])
         gauss_specs.append(gauss_specj)
         zabs=0.77086
-        wave = np.arange(lam1,lam2,0.05)
+        wave = np.arange(4849.58349609375,5098.33349609375+0.125, 0.03)
         vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
+        #wave = np.arange(lam1,lam2,0.05)
+        #vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
         cond_abs1 = gauss_specj < 0.98
         cond_abs2 = np.abs(vels_wave) < 1000
         abs_gauss_spec_major = vels_wave[cond_abs1 & cond_abs2]
