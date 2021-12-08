@@ -375,15 +375,15 @@ def get_clouds(ypos,zpos,probs,velos):
         selected = probs >= randomnum
         return(velos[selected])
 
-def losspec(lam,velos,X, N,b,z):
-        #nvals = np.logspace(12.6, 16, 1000)
-        #fN = RanDist(nvals, ndist(nvals))
+def losspec(lam,velos,X, Ngffgv,b,z):
+        nvals = np.logspace(12.6, 16, 1000)
+        fN = RanDist(nvals, ndist(nvals))
 
-        #Ns = fN.random(len(velos))
+        Ns = fN.random(len(velos))
         #print(Ns)
-       # N = np.empty([len(velos), 1])
-       # for i in range(len(Ns)):
-        #    N[i,0]=Ns[i]
+        N = np.empty([len(velos), 1])
+        for i in range(len(Ns)):
+            N[i,0]=Ns[i]
         taus = Tau(lam,velos,X,N,b,z)
         tottau = np.sum(taus,axis=0)
         return(np.exp(-tottau))
@@ -411,7 +411,7 @@ def averagelos(r0, theta,theta_min, D,alpha,incli, zmax, size, vel, itera, X, N,
         totflux = np.median(fluxtoaver, axis=0)
 
         return(totflux, len(results[0]))
-
+    
 def Tau(lam,vel,X,N, b,z):
     if X ==1:
         lam0 = [2796.35]
@@ -455,6 +455,51 @@ def Tau(lam,vel,X,N, b,z):
     taust = taus.sum(axis=0)
     #print(taust)
     return(taust)
+
+
+'''def Tau(lam,vel,X,N, b,z):
+    if X ==1:
+        lam0 = [2796.35]
+        f = [0.6155]
+    if X ==2:
+        lam0 = [2803.53]
+        f = [0.3054]
+    if X ==12:
+
+        lam0 = [2796.35, 2803.53]
+        f = [0.6155, 0.3054]
+
+    gamma, mass = [2.68e8, 24.305]
+    c  = const.c.to('cm/s').value
+    sigma0 = 0.0263
+    taus = []
+    for i in range(len(lam0)):
+
+        lamc = ((vel[:,None]/const.c.to('km/s').value)+1)*((lam0[i]))
+            #print('lamc', lamc)
+        nu = c/(lam*1e-8)
+        nu0 = c/(lamc*1e-8)
+
+        dnu = nu - (nu0/(1+z))
+        dnud = (b[:, np.newaxis]*100000)*nu/c
+       # print(len(dnud))
+
+        x = dnu/dnud
+        y = gamma/(4*np.pi*dnud)
+        zi = x + 1j*y
+        v = np.asarray(np.real(wofz(zi)/(np.sqrt(np.pi)*dnud)))
+
+        #print('N', N)
+        #print('v', v)
+
+        taut =N * sigma0*f[i] * v
+
+        taus.append(taut)
+
+    taus = np.asarray(taus)
+    taust = taus.sum(axis=0)
+    #print(taust)
+    return(taust)'''
 
 def eq_w(spec, vel, rang,z, w_pix):
     cond = np.abs(vel)<rang
@@ -549,9 +594,9 @@ def TPCF(speci_empty):
 
 
 Ns = 10**14
-theta_maxs = 30
+theta_maxs = [10,40,80]
 r_0 = 10
-size = [0.01,0.1,1]
+size = 0.05
 vel = 200
 
 EWs = []
@@ -559,14 +604,14 @@ specs = []
 nr_clouds = []
 ds_s = []
 
-for i in range(len(size)):
-    bla = get_sample(Ns,theta_maxs,0,r_0,size[i],vel)
+for i in range(len(theta_maxs)):
+    bla = get_sample(Ns,theta_maxs[1],0,r_0,size,vel)
     EWs.append(bla[0])
     specs.append(bla[1])
     nr_clouds.append(bla[2])
     ds_s.append(bla[3])
 
-np.save('out_EW_6', EWs)
-np.save('out_specs_6', specs)
-np.save('out_nr_clouds_6', nr_clouds)
-np.save('out_ds_6', ds_s)
+np.save('out_EW_7', EWs)
+np.save('out_specs_7', specs)
+np.save('out_nr_clouds_7', nr_clouds)
+np.save('out_ds_7', ds_s)
