@@ -14,7 +14,7 @@ def log_log(r,a,b):
 
 def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
     r_t = r/r_vir
-    return(10**(a)*(10**(-b*r_t)))
+    return(np.exp(a)*(np.exp(-b*r_t)))
 
 
 def prob_hit_don(r, r_vir, prob_rc, rmax, por_r_vir = 0.5):
@@ -88,11 +88,15 @@ def prob_hit_pow_law(r, r_vir, prob_rc, rmax, por_r_vir = 0.5):
 
 
 #### define grids for the poor mans mcmc
+bs = np.logspace(0.1,1.5,10) 
+csize = np.logspace(0.01,1,10)
+hs = 5
+hv = 10
 
-bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = np.linspace(0.01,1,7) #poner en escala mas separada
-hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
-hv = np.linspace(0, 20,7) #bajar maximo a 100
+#bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+#csize = np.linspace(0.01,1,7) #poner en escala mas separada
+#hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
+#hv = np.linspace(0, 20,7) #bajar maximo a 100
 
 params = [bs,csize,hs,hv]
 
@@ -102,22 +106,34 @@ params = [bs,csize,hs,hv]
 results_Wr = []
 results_D = []
 results_R_vir = []
+results_specs = []
 
-for l in range(len(bs)):
+'''for l in range(len(bs)):
     for i in range(len(csize)):
         for j in range(len(hs)):
             for k in range(len(hv)):
                 print(l,i,j,k)
                 exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs[j], hv=hv[k])
-                e3_a_1 = exp_fill_fac.Nielsen_sample(2,bs[l],0.2)
+                e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
                 results_Wr.append(e3_a_1[8])
                 results_D.append(e3_a_1[3])
-                results_R_vir.append(e3_a_1[7])
+                results_R_vir.append(e3_a_1[7])'''
+
+for l in range(len(bs)):
+    for i in range(len(csize)):
+        print(l,i)
+        exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs, hv=hv)
+        e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
+        results_Wr.append(e3_a_1[8])
+        results_D.append(e3_a_1[3])
+        results_R_vir.append(e3_a_1[7])
+        results_specs.append(e3_a_1[1])
                 
                 
-results_Wr_r = np.reshape(results_Wr, (7,7,7,7,300))
-results_D_r = np.reshape(results_D, (7,7,7,7,300))
-results_R_vir_r = np.reshape(results_R_vir, (7,7,7,7,300))
+results_Wr_r = np.reshape(results_Wr, (10,10,300))
+results_D_r = np.reshape(results_D, (10,10,300))
+results_R_vir_r = np.reshape(results_R_vir, (10,10,300))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 
-np.save('mcmc_4', results_r)
+np.save('mcmc_5', results_r)
+np.save('mcmc_5_specs',results_specs)
