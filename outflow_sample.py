@@ -596,7 +596,7 @@ def TPCF(speci_empty):
 Ns = 10**14
 theta_maxs = [10,40,80]
 r_0 = 10
-size = 0.05
+size = 0.01
 vel = 200
 
 EWs = []
@@ -611,7 +611,7 @@ for i in range(len(theta_maxs)):
     nr_clouds.append(bla[2])
     ds_s.append(bla[3])
 
-np.save('out_EW_7', EWs)
-np.save('out_specs_7', specs)
-np.save('out_nr_clouds_7', nr_clouds)
-np.save('out_ds_7', ds_s)
+np.save('out_EW_8', EWs)
+np.save('out_specs_8', specs)
+np.save('out_nr_clouds_8', nr_clouds)
+np.save('out_ds_8', ds_s)
