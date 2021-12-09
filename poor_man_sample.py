@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import cgmspec.Sample as sample
 
 import concurrent.futures
+import itertools
 
 ###possible filling factor functions
 
@@ -70,6 +71,7 @@ def get_sample(bs, csize, hs, h_v):
     D = e3_a_1[3]
     R_vir = e3_a_1[7]
     specs = e3_a_1[1]
+    print(bs, csize, hs, h_v)
     return(Wr, D, R_vir, specs)
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
