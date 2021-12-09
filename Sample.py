@@ -346,9 +346,10 @@ class Sample:
 
         print('6')
         random_vels_i = f_v.random(sample_size)
-
+        print('6a')
         #random_vels_i = fN_v.random(sample_size)
         random_r_vir_i = (random_vels_i * u.km /u.second)*0.1/H
+        print('6b')
         random_r_vir_i = random_r_vir_i.to(u.kpc).value
 
         print('7')
