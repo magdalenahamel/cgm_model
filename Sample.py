@@ -61,6 +61,10 @@ D_churchill_iso = churchill_iso['D'].to_numpy()
 chen_iso = pd.read_csv('chen_data.txt', error_bad_lines=False, delim_whitespace=True)
 D_chen = chen_iso['rho'].to_numpy()
 
+D_dist_magii = np.histogram(D_churchill_iso,100,(np.min(D_churchill_iso),np.max(D_churchill_iso)))[0]
+D_vals_magii = np.linspace(np.min(D_churchill_iso),np.max(D_churchill_iso),100)
+f_D_C = RanDist(D_vals_magii, D_dist_magii)
+
 #### Parameters distributions ####
 
 '''Inclination distribution'''
