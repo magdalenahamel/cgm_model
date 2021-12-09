@@ -76,8 +76,8 @@ def get_sample(bs, csize, hs, h_v):
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, groups)
-    
-print(results.result())
+    for result in results:
+        print(result.result())
 
     
 EW_results = results[:][0]
