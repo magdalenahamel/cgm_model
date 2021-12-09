@@ -380,7 +380,7 @@ class Sample:
             alpha = alpha_i[i]
 
             model = cgm.Disco(h, random_inclis_i[i], Rcore=0.1)
-            print('loop',bs,csize,h,hv)
+            #print('loop',bs,csize,h,hv)
             cells = get_cells(model,d,alpha,csize, random_r_vir_i[i],prob_r_cs,random_vels_i[i],hv,self.filling_factor,  rmax, por_r_vir)
             results = [0]*1
             results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
