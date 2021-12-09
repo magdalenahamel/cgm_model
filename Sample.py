@@ -337,19 +337,20 @@ class Sample:
         print('4')
         alpha_i = random.choices(alphas, k=sample_size)
         #d_i = random.choices(ds, k=sample_size)
-        ('before f_d_C')
+        print('5')
         d_i = f_D_C.random(sample_size)
 
-        ('after f_d_C')
+        print('6')
         random_vels_i = f_v.random(sample_size)
 
         #random_vels_i = fN_v.random(sample_size)
         random_r_vir_i = (random_vels_i * u.km /u.second)*0.1/H
         random_r_vir_i = random_r_vir_i.to(u.kpc).value
 
-
+        print('7')
         random_inclis_i = fN.random(sample_size)
         random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
+        print('8')
         random_nr_clouds_pow_i = []
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
