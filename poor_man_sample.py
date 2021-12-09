@@ -64,9 +64,10 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 groups = list(list(itertools.product(bs,csize,hs,hv)))
 
-print('g', groups)
+#print('g', groups)
 
 def get_sample(bla):
+    print('empieza:', bla)
     bs, csize, hs, h_v = bla[0], bla[1],bla[2], bla[3]
     exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
@@ -85,7 +86,7 @@ for r in results:
     print(r)
 
     
-EW_results = results[:][0]
+'''EW_results = results[:][0]
 D_results = results[:][1]
 R_vir_results = results[:][2]
 specs_results = results[:][3]
@@ -98,4 +99,4 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 
 
 np.save('mp_mcmc_6', results_r)
-np.save('mp_mcmc_6_specs',specs_r)
+np.save('mp_mcmc_6_specs',specs_r)'''
