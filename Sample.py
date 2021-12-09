@@ -289,11 +289,7 @@ class Sample:
         hv = self.hv
         sample_size = self.sample_size
 
-        xs = np.linspace(-dmax,dmax,2*dmax)
-        ys = np.linspace(-dmax,dmax,2*dmax)
-        x, y = np.meshgrid(xs, ys)
-        print('before csu')
-        d_alpha_t = csu.xy2alpha(x, y)
+        
         print('after csu')
         '''ds = []
         alphas = []
