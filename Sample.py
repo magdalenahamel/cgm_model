@@ -28,263 +28,22 @@ from astropy.cosmology import FlatLambdaCDM
 import importlib
 from numpy import float32
 
-importlib.reload(csu)
+#### Define the spectral resolution ####
 
+zabs = 0.77086
+lam0 = 2796.35
 
-wave = np.arange(4849.58349609375,5098.33349609375+0.125, 0.03)
-vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + 0.77086))) - 1))
+vel_min = -1500
+vel_max = 1500
+lam_min = ((vel_min/const.c.to('km/s').value)+1)*(lam0*(1+zabs)) 
+lam_max = ((vel_max/const.c.to('km/s').value)+1)*(lam0*(1+zabs)) 
 
+w_spectral = 0.03
 
-def hist_norm_height(n,bins,const):
-    ''' Function to normalise bin height by a constant.
-        Needs n and bins from np.histogram or ax.hist.'''
+wave = np.arange(lam_min,lam_max+w_spectral, w_spectral)
+vels_wave = (const.c.to('km/s').value * ((wave/ (lam0 * (1 + zabs))) - 1))
 
-
-    n = np.repeat(n,2)
-
-    n = float32(n) / const
-    n = np.nan_to_num(n)
-
-    new_bins = [bins[0]]
-    new_bins.extend(np.repeat(bins[1:],2))
-    return n,new_bins[:-1]
-
-def TPCF(spec, vel):
-    cond1 = spec < 0.98
-    cond2 = np.abs(vels_wave) < 1000
-    abs_spec = vel[cond1 & cond2]
-    sub_arr = np.abs(abs_spec[:,None] - abs_spec)
-    N = abs_spec.size
-    rem_idx = np.arange(N)*(N+1)
-    out = np.delete(sub_arr,rem_idx)
-
-    return(out)
-
-def TPC_plots(sample, nr):
-    alphas = sample[2]
-    inclis = sample[6]
-    specs = sample[1]
-    equi_wids = sample[8]
-    #cond_equi_wid = equi_wids > 0.04
-
-    #alphas = alphas[cond_equi_wid]
-    #inclis = inclis[cond_equi_wid]
-    #specs = specs[cond_equi_wid]
-
-    #print(alphas)
-    gauss_spec= []
-    for i in range(len(specs)):
-        gauss_specj = csu.filtrogauss(45000,0.03,2796.35,specs[i])
-        gauss_spec.append(gauss_specj)
-
-    gauss_spec = np.asarray(gauss_spec)
-
-
-    cond_alpha_l_exp_1 = (np.fabs(alphas)<45) | (np.fabs(alphas)>135)
-    cond_alpha_h_exp_1 = (np.fabs(alphas)>45) & (np.fabs(alphas)<135)
-
-    cond_incli_h_exp_1 = inclis > 57
-    cond_incli_l_exp_1 = inclis < 57
-
-
-    spec_alpha_l_incli_h_exp_1 = gauss_spec[cond_alpha_l_exp_1 & cond_incli_h_exp_1]
-    spec_alpha_h_incli_h_exp_1 = gauss_spec[cond_alpha_h_exp_1 & cond_incli_h_exp_1]
-    spec_alpha_l_incli_l_exp_1 = gauss_spec[cond_alpha_l_exp_1 & cond_incli_l_exp_1]
-    spec_alpha_h_incli_l_exp_1 = gauss_spec[cond_alpha_h_exp_1 & cond_incli_l_exp_1]
-
-    TPCF_l_h_exp_1 = []
-
-    for i in range(len(spec_alpha_l_incli_h_exp_1)):
-        TPCFi = TPCF(spec_alpha_l_incli_h_exp_1[i], vels_wave)
-
-        TPCF_l_h_exp_1.append(TPCFi)
-
-    TPCF_l_h_exp_1 = np.concatenate(TPCF_l_h_exp_1).ravel()
-    #print(TPCF_l_h_exp_1)
-    if len(TPCF_l_h_exp_1) == 0:
-        v_50_l_h_exp_1 = 0
-        v_90_l_h_exp_1 = 0
-    else:
-        v_50_l_h_exp_1 = np.percentile(TPCF_l_h_exp_1,50)
-        v_90_l_h_exp_1 = np.percentile(TPCF_l_h_exp_1,90)
-
-    TPCF_h_h_exp_1 = []
-
-    for i in range(len(spec_alpha_h_incli_h_exp_1)):
-        TPCFi = TPCF(spec_alpha_h_incli_h_exp_1[i], vels_wave)
-        TPCF_h_h_exp_1.append(TPCFi)
-
-    TPCF_h_h_exp_1 = np.concatenate(TPCF_h_h_exp_1).ravel()
-    if len(TPCF_h_h_exp_1) == 0:
-        v_50_h_h_exp_1 = 0
-        v_90_h_h_exp_1 = 0
-    else:
-        v_50_h_h_exp_1 = np.percentile(TPCF_h_h_exp_1,50)
-        v_90_h_h_exp_1 = np.percentile(TPCF_h_h_exp_1,90)
-
-    TPCF_l_l_exp_1 = []
-
-    for i in range(len(spec_alpha_l_incli_l_exp_1)):
-        TPCFi = TPCF(spec_alpha_l_incli_l_exp_1[i], vels_wave)
-        TPCF_l_l_exp_1.append(TPCFi)
-
-    TPCF_l_l_exp_1 = np.concatenate(TPCF_l_l_exp_1).ravel()
-    #print(TPCF_l_l_exp_1)
-
-    if len(TPCF_l_l_exp_1) == 0:
-        v_50_l_l_exp_1 = 0
-        v_90_l_l_exp_1 = 0
-    else:
-        v_50_l_l_exp_1 = np.percentile(TPCF_l_l_exp_1,50)
-        v_90_l_l_exp_1 = np.percentile(TPCF_l_l_exp_1,90)
-
-
-
-
-    TPCF_h_l_exp_1 = []
-
-    for i in range(len(spec_alpha_h_incli_l_exp_1)):
-        TPCFi = TPCF(spec_alpha_h_incli_l_exp_1[i], vels_wave)
-        TPCF_h_l_exp_1.append(TPCFi)
-
-    TPCF_h_l_exp_1 = np.concatenate(TPCF_h_l_exp_1).ravel()
-    if len(TPCF_h_l_exp_1) == 0:
-        v_50_h_l_exp_1 = 0
-        v_90_h_l_exp_1 = 0
-    else:
-        v_50_h_l_exp_1  = np.percentile(TPCF_h_l_exp_1 ,50)
-        v_90_h_l_exp_1  = np.percentile(TPCF_h_l_exp_1 ,90)
-
-
-
-
-    TPCF_alha_l_exp_1 = np.concatenate((TPCF_l_l_exp_1,TPCF_l_h_exp_1))
-    if len(TPCF_alha_l_exp_1) == 0:
-        v_50_alha_l_exp_1 = 0
-        v_90_alha_l_exp_1 = 0
-    else:
-        v_50_alha_l_exp_1  = np.percentile(TPCF_alha_l_exp_1 ,50)
-        v_90_alha_l_exp_1  = np.percentile(TPCF_alha_l_exp_1 ,90)
-    TPCF_alha_h_exp_1 = np.concatenate((TPCF_h_l_exp_1,TPCF_h_h_exp_1))
-    if len(TPCF_alha_h_exp_1) == 0:
-        v_50_alha_h_exp_1 = 0
-        v_90_alha_h_exp_1 = 0
-    else:
-        v_50_alha_h_exp_1  = np.percentile(TPCF_alha_h_exp_1 ,50)
-        v_90_alha_h_exp_1  = np.percentile(TPCF_alha_h_exp_1 ,90)
-
-    TPCF_incli_h_exp_1 = np.concatenate((TPCF_h_h_exp_1,TPCF_l_h_exp_1))
-    if len(TPCF_incli_h_exp_1) == 0:
-        v_50_incli_h_exp_1 = 0
-        v_90_incli_h_exp_1 = 0
-    else:
-        v_50_incli_h_exp_1  = np.percentile(TPCF_incli_h_exp_1 ,50)
-        v_90_incli_h_exp_1  = np.percentile(TPCF_incli_h_exp_1 ,90)
-    TPCF_incli_l_exp_1 = np.concatenate((TPCF_h_l_exp_1,TPCF_l_l_exp_1))
-    if len(TPCF_incli_l_exp_1) == 0:
-        v_50_incli_l_exp_1 = 0
-        v_90_incli_l_exp_1 = 0
-    else:
-        v_50_incli_l_exp_1  = np.percentile(TPCF_incli_l_exp_1 ,50)
-        v_90_incli_l_exp_1  = np.percentile(TPCF_incli_l_exp_1 ,90)
-
-    hist_range = np.arange(0,350,10)
-
-    h_1_1 = np.histogram(TPCF_incli_l_exp_1,hist_range)
-    h_1_2 = np.histogram(TPCF_incli_h_exp_1,hist_range)
-
-    h_2_1 = np.histogram(TPCF_h_l_exp_1,hist_range)
-    h_2_2 = np.histogram(TPCF_h_h_exp_1,hist_range)
-
-    h_3_1 = np.histogram(TPCF_l_l_exp_1,hist_range)
-    h_3_2 = np.histogram(TPCF_l_h_exp_1,hist_range)
-
-    #print('blaaaaaa',h_3_1, h_3_2)
-
-    h_4_1 = np.histogram(TPCF_alha_l_exp_1,hist_range)
-    h_4_2 = np.histogram(TPCF_alha_h_exp_1,hist_range)
-
-    h_5_1 = np.histogram(TPCF_l_h_exp_1,hist_range)
-    h_5_2 = np.histogram(TPCF_h_h_exp_1,hist_range)
-
-    h_6_1 = np.histogram(TPCF_l_l_exp_1,hist_range)
-    h_6_2 = np.histogram(TPCF_h_l_exp_1,hist_range)
-
-    h_1_1_t = hist_norm_height(h_1_1[0],h_1_1[1], len(TPCF_incli_l_exp_1))
-    h_1_2_t = hist_norm_height(h_1_2[0],h_1_2[1], len(TPCF_incli_h_exp_1))
-
-    h_2_1_t = hist_norm_height(h_2_1[0],h_2_1[1], len(TPCF_h_l_exp_1))
-    h_2_2_t = hist_norm_height(h_2_2[0],h_2_2[1], len(TPCF_h_h_exp_1))
-
-    h_3_1_t = hist_norm_height(h_3_1[0],h_3_1[1], len(TPCF_l_l_exp_1))
-    h_3_2_t = hist_norm_height(h_3_2[0],h_3_2[1], len(TPCF_l_h_exp_1))
-    #print(h_3_1_t,h_3_2_t )
-
-    h_4_1_t = hist_norm_height(h_4_1[0],h_4_1[1], len(TPCF_alha_l_exp_1))
-    h_4_2_t = hist_norm_height(h_4_2[0],h_4_2[1], len(TPCF_alha_h_exp_1))
-
-    h_5_1_t = hist_norm_height(h_5_1[0],h_5_1[1], len(TPCF_l_h_exp_1))
-    h_5_2_t = hist_norm_height(h_5_2[0],h_5_2[1], len(TPCF_h_h_exp_1))
-
-    h_6_1_t = hist_norm_height(h_6_1[0],h_6_1[1], len(TPCF_l_l_exp_1))
-    h_6_2_t = hist_norm_height(h_6_2[0],h_6_2[1], len(TPCF_h_l_exp_1))
-
-    fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3,sharey=True, sharex=True)
-    fig.set_figheight(9)
-    fig.set_figwidth(15)
-    ax1.step(h_1_1_t[1],h_1_1_t[0],label = 'Face on')
-    ax1.step(h_1_2_t[1],h_1_2_t[0],label = 'Edge on')
-    tex = 'All alphas'
-    ax1.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax1.legend()
-    ax2.step(h_2_1_t[1],h_2_1_t[0],label = 'Face on')
-    ax2.step(h_2_2_t[1],h_2_2_t[0],label = 'Edge on')
-    tex = 'Minor axis'
-    ax2.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax2.legend()
-    ax3.step(h_3_1_t[1],h_3_1_t[0],label = 'Face on')
-    ax3.step(h_3_2_t[1],h_3_2_t[0],label = 'Edge on')
-    tex = 'Major axis'
-    ax3.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax3.legend()
-    ax4.step(h_4_1_t[1],h_4_1_t[0],label = 'Major axis', c='g')
-    ax4.step(h_4_2_t[1],h_4_2_t[0],label = 'Minor axis', c='magenta')
-    tex = 'All inclinations'
-    ax4.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax4.legend()
-    ax5.step(h_5_1_t[1],h_5_1_t[0],label = 'Major axis', c='g')
-    ax5.step(h_5_2_t[1],h_5_2_t[0],label = 'Minor axis', c='magenta')
-    tex = 'Edge on'
-    ax5.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax5.legend()
-    #print('plooot1',h_6_1_t[1],h_6_1_t[0])
-    #print('plooot2',h_6_2_t[1],h_6_2_t[0])
-    ax6.step(h_6_1_t[1],h_6_1_t[0],label = 'Major axis', c='g')
-    ax6.step(h_6_2_t[1],h_6_2_t[0],label = 'Minor axis', c='magenta')
-    tex = 'Face on'
-    ax6.text(200, 0.15, tex, fontsize=13, va='bottom')
-    ax6.legend()
-    plt.savefig('TPCF_hist_%s.png' %nr)
-    return([(v_50_incli_l_exp_1,
-    v_90_incli_l_exp_1),
-    (v_50_incli_h_exp_1,
-    v_90_incli_h_exp_1),
-    (v_50_alha_l_exp_1,
-    v_90_alha_l_exp_1),
-    (v_50_alha_h_exp_1,
-    v_90_alha_h_exp_1),
-    (v_50_l_l_exp_1,
-    v_90_l_l_exp_1),
-    (v_50_h_l_exp_1,
-    v_90_h_l_exp_1),
-    (v_50_l_h_exp_1,
-    v_90_l_h_exp_1),
-    (v_50_h_h_exp_1,
-    v_90_h_h_exp_1)])
-
-
-
-
+##### Data ####
 
 magiicat_iso = data_r_vir = pd.read_csv('magiicat_isolated.txt', error_bad_lines=False, delim_whitespace=True)
 D_magiicat = magiicat_iso['D'].to_numpy()
@@ -302,7 +61,9 @@ D_churchill_iso = churchill_iso['D'].to_numpy()
 chen_iso = pd.read_csv('chen_data.txt', error_bad_lines=False, delim_whitespace=True)
 D_chen = chen_iso['rho'].to_numpy()
 
+#### Parameters distributions ####
 
+'''Inclination distribution'''
 def sin_i_dist(y, ymin):
     Ay = 1/np.sqrt(1-ymin**2)
     return(Ay * y / np.sqrt(1-(y**2)))
@@ -310,7 +71,7 @@ def sin_i_dist(y, ymin):
 sinivals = np.linspace(np.sin(np.radians(5.7)),0.99,100)
 fN = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
 
-
+'''Doppler parameter distribution'''
 
 df = 6.71701 # parametro de forma.
 chi2 = stats.chi2(df)
@@ -320,30 +81,24 @@ fp = chi2.pdf(x) # Función de Probabilidad
 bvals = np.linspace(0,20,100)
 fNb = RanDist(bvals, chi2.pdf(bvals))
 
+'''v_max distribution'''
+
 def rot_vel_dist(v, phi_c, v_c, alpha, beta):
     a = phi_c*((v/v_c)**alpha)
     b = np.exp(-(v/v_c)**beta)
     c = beta/gamma(alpha/beta)
     return(a*b)
 
+'''N distribution'''
 
-D_dist_magii = np.histogram(D_churchill_iso,100,(np.min(D_churchill_iso),np.max(D_churchill_iso)))[0]
-D_vals_magii = np.linspace(np.min(D_churchill_iso),np.max(D_churchill_iso),100)
-f_D_C = RanDist(D_vals_magii, D_dist_magii)
+def ndist(n, beta = 1.5 ):
+    return n**-beta
 
-D_dist_chen = np.histogram(D_chen,100,(np.min(D_chen),np.max(D_chen)))[0]
-D_vals_chen = np.linspace(np.min(D_chen),np.max(D_chen),100)
-f_D_chen = RanDist(D_vals_chen, D_dist_chen)
-
-
-v_dist_magii = np.histogram(v_magiicat,100,(np.min(v_magiicat),np.max(v_magiicat)))[0]
-
-v_vals = np.linspace(np.min(v_magiicat),np.max(v_magiicat),100)
-f_v = RanDist(v_vals, v_dist_magii)
+nvals = np.logspace(12.6, 16, 1000)
+fN = RanDist(nvals, ndist(nvals))
 
 
-
-
+#### Model fuctions ####
 
 def get_clouds(ypos,zpos,probs,velos):
     randomnum = np.random.uniform(0, 100, len(probs))
@@ -427,8 +182,7 @@ def Tau(lam,vel,X,N, b,z):
     return(taust)
 
 def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
-
-
+    
     h = model.h
     incli = model.incl
 
@@ -497,8 +251,6 @@ class Sample:
 
     def __init__(self, filling_factor, dmax, h=10, w_pix = 0.03, zabs=0.77086, csize=1, hv=10, sample_size=2000):
         """c"""
-
-
         self.filling_factor  = filling_factor
         self.dmax = dmax
         self.h = h
@@ -507,9 +259,6 @@ class Sample:
         self.csize=csize
         self.hv=hv
         self.sample_size=sample_size
-
-
-
 
 
     def Nielsen_sample(self, prob_r_cs, rmax, por_r_vir):
@@ -538,8 +287,8 @@ class Sample:
                     ds.append(d_alpha_t[0][i][j])
                     alphas.append(d_alpha_t[1][i][j])
 
-        wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
-        vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
+        #wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
+        #vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
 
 
         z_median = np.median(z_gal_magiicat)
@@ -557,13 +306,7 @@ class Sample:
         vels = np.linspace(vel_min,vel_max,1000)
 
         vels_dist = rot_vel_dist(vels,0.061,10**2.06, 0.66, 2.10)
-
-
         fN_v = RanDist(vels, vels_dist)
-
-
-
-
 
         d_alpha = list(zip(ds,alphas))
 
@@ -596,11 +339,6 @@ class Sample:
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
 
-
-
-
-
-
         for i in range(sample_size):
             d = d_i[i]
             alpha = alpha_i[i]
@@ -614,7 +352,7 @@ class Sample:
             speci = averagelos(model, d, alpha, wave, 1,1, zabs, csize, b, 0, random_vels_i[i], hv, 0, results)
             random_specs.append(speci)
             random_nr_clouds.append(results_nr[0])
-            equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i], zabs,  w_pix)
+            equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i]+20, zabs,  w_pix)
             random_equi_wid.append(equi_wid_i)
             #print(i)
 
@@ -629,7 +367,7 @@ class Sample:
         np.asarray(random_equi_wid)]))
 
 
-def Chen_sample(self, prob_r_cs, rmax, por_r_vir):
+'''def Chen_sample(self, prob_r_cs, rmax, por_r_vir):
     dmax = self.dmax
     filling_factor = self.filling_factor
     dmax = self.dmax
@@ -743,4 +481,4 @@ def Chen_sample(self, prob_r_cs, rmax, por_r_vir):
     np.asarray(random_b),
     np.asarray(random_inclis_i),
     np.asarray(random_r_vir_i),
-    np.asarray(random_equi_wid)]))
+    np.asarray(random_equi_wid)]))'''
