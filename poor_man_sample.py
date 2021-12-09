@@ -64,6 +64,8 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 groups = list(itertools.product(bs,csize,hs,hv))
 
+print('g', groups)
+
 def get_sample(bs, csize, hs, h_v):
     exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
