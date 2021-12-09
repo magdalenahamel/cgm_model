@@ -5,7 +5,8 @@ import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
 
-import cgmspec.Sample as sample
+from Sample import Sample as sample
+#import cgmspec.Sample as sample
 
 import concurrent.futures
 import itertools
