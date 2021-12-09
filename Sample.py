@@ -61,11 +61,13 @@ D_churchill_iso = churchill_iso['D'].to_numpy()
 chen_iso = pd.read_csv('chen_data.txt', error_bad_lines=False, delim_whitespace=True)
 D_chen = chen_iso['rho'].to_numpy()
 
+
+
+#### Parameters distributions ####
+
 D_dist_magii = np.histogram(D_churchill_iso,100,(np.min(D_churchill_iso),np.max(D_churchill_iso)))[0]
 D_vals_magii = np.linspace(np.min(D_churchill_iso),np.max(D_churchill_iso),100)
 f_D_C = RanDist(D_vals_magii, D_dist_magii)
-
-#### Parameters distributions ####
 
 '''Inclination distribution'''
 def sin_i_dist(y, ymin):
@@ -92,6 +94,11 @@ def rot_vel_dist(v, phi_c, v_c, alpha, beta):
     b = np.exp(-(v/v_c)**beta)
     c = beta/gamma(alpha/beta)
     return(a*b)
+
+v_dist_magii = np.histogram(v_magiicat,100,(np.min(v_magiicat),np.max(v_magiicat)))[0]
+
+v_vals = np.linspace(np.min(v_magiicat),np.max(v_magiicat),100)
+f_v = RanDist(v_vals, v_dist_magii)
 
 '''N distribution'''
 
