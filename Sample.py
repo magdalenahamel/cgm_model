@@ -262,6 +262,7 @@ class Sample:
 
 
     def Nielsen_sample(self, prob_r_cs, rmax, por_r_vir):
+        print('runing sample')
         dmax = self.dmax
         filling_factor = self.filling_factor
         dmax = self.dmax
