@@ -287,7 +287,7 @@ class Sample:
                 else:
                     ds.append(d_alpha_t[0][i][j])
                     alphas.append(d_alpha_t[1][i][j])
-
+        prrint('runed alphas')
         #wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
         #vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
 
