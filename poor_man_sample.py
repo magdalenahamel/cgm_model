@@ -66,7 +66,8 @@ groups = list(list(itertools.product(bs,csize,hs,hv)))
 
 print('g', groups)
 
-def get_sample(bs, csize, hs, h_v):
+def get_sample(bla):
+    bs, csize, hs, h_v = bla[0], bla[1],bla[2], bla[3]
     exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
     Wr = e3_a_1[8]
@@ -78,8 +79,7 @@ def get_sample(bs, csize, hs, h_v):
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, args=groups)
-    for result in results:
-        print(result.result())
+    print(result.result())
 
     
 EW_results = results[:][0]
