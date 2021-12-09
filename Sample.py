@@ -290,7 +290,7 @@ class Sample:
         sample_size = self.sample_size
 
         
-        print('after csu')
+        #print('after csu')
         '''ds = []
         alphas = []
         for i in range(len(d_alpha_t[0])):
@@ -337,9 +337,10 @@ class Sample:
 
         alpha_i = random.choices(alphas, k=sample_size)
         #d_i = random.choices(ds, k=sample_size)
+        ('before f_d_C')
         d_i = f_D_C.random(sample_size)
 
-
+        ('after f_d_C')
         random_vels_i = f_v.random(sample_size)
 
         #random_vels_i = fN_v.random(sample_size)
