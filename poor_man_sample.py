@@ -85,7 +85,7 @@ specs_results = results[:][3]
 EW_r = np.reshape(EW_results, (7,7,7,7,300))
 D_r = np.reshape(D_results, (7,7,7,7,300))
 R_vir_r = np.reshape(R_vir_results, (7,7,7,7,300))
-specs_r = np.reshape(specs_results, (7,7,7,7,300,len(wave))
+specs_r = np.reshape(specs_results, (7,7,7,7,300,len(wave)))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 
 
