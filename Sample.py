@@ -270,7 +270,7 @@ for i in range(len(d_alpha_t[0])):
            ds.append(d_alpha_t[0][i][j])
            alphas.append(d_alpha_t[1][i][j])
 
-
+print('initial alpha', alphas)
 """This Class Sample represents a sample of MgII absorbers from Galaxies with the model Disco"""
 
 
@@ -348,6 +348,7 @@ class Sample:
 
         print('4')
         alpha_i = random.choices(alphas, k=sample_size)
+        print('selected alpha', alpha_i)
         #d_i = random.choices(ds, k=sample_size)
         print('5')
         d_i = f_D_C.random(sample_size)
