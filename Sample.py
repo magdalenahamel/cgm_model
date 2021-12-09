@@ -247,7 +247,8 @@ def los_vel(model, y, D, alpha, vR, hv, v_inf=0):
         a = np.sin(model.incl_rad) / np.sqrt(1 + (y/x0)**2)
     else:
         a = -np.sin(model.incl_rad) / np.sqrt(1 + (y/x0)**2)
-
+    if hv == 0:
+        vr = (vR*vrot*a) + v_los_inf
     b = np.exp(-np.fabs(y - y0) / hv * np.tan(model.incl_rad))
         #print(b)
     vr = (vR*vrot*a*b) + v_los_inf
@@ -364,9 +365,9 @@ class Sample:
 
         print('7')
         random_inclis_i = f_D_i.random(sample_size)
-        print('inclis rad', random_inclis_i )
+        #print('inclis rad', random_inclis_i )
         random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
-        print('inclis deg', random_inclis_i )
+        #print('inclis deg', random_inclis_i )
         print('8')
         random_nr_clouds_pow_i = []
         random_specs_pow_i = []
