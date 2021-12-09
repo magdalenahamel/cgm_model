@@ -78,7 +78,7 @@ def get_sample(bla):
     return(Wr, D, R_vir, specs)
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
-    results = executor.map(get_sample, args=groups)
+    results = executor.map(get_sample, groups)
     print(result.result())
 
     
