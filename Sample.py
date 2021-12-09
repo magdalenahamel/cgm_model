@@ -76,7 +76,7 @@ def sin_i_dist(y, ymin):
 
 sinivals = np.linspace(np.sin(np.radians(5.7)),0.99,100)
 f_D_i = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
-print('exi', sin_i_dist(sinivals,np.radians(5.7)))
+print('exi', f_D_i.random(10))
 
 '''Doppler parameter distribution'''
 
