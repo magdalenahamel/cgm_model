@@ -5,7 +5,7 @@ import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
 
-from Sample import Sample as sample
+import Sample
 #import cgmspec.Sample as sample
 
 import concurrent.futures
@@ -70,7 +70,7 @@ groups = list(list(itertools.product(bs,csize,hs,hv)))
 def get_sample(bla):
     print('empieza:', bla)
     bs, csize, hs, h_v = bla[0], bla[1],bla[2], bla[3]
-    exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
+    exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
     print('crea:', bla)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
     print('calcula:', bla)
