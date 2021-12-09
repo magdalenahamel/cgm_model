@@ -368,7 +368,7 @@ class Sample:
         random_equi_wid_pow_i =[]
         print('before loop')
         for i in range(sample_size):
-            print('running samile i')
+            print('running samile ', i)
             d = d_i[i]
             alpha = alpha_i[i]
 
