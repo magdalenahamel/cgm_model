@@ -62,7 +62,7 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 ### Multiprocess ###
 
-groups = list(itertools.product(bs,csize,hs,hv))
+groups = list(list(itertools.product(bs,csize,hs,hv)))
 
 print('g', groups)
 
