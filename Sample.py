@@ -75,7 +75,7 @@ def sin_i_dist(y, ymin):
     return(Ay * y / np.sqrt(1-(y**2)))
 
 sinivals = np.linspace(np.sin(np.radians(5.7)),0.99,100)
-fi = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
+f_D_i = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
 
 '''Doppler parameter distribution'''
 
@@ -362,7 +362,7 @@ class Sample:
         random_r_vir_i = random_r_vir_i.to(u.kpc).value
 
         print('7')
-        random_inclis_i = fi.random(sample_size)
+        random_inclis_i = f_D_i.random(sample_size)
         print('inclis rad', random_rad_i )
         random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
         print('inclis deg', random_inclis_i )
