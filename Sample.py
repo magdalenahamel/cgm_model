@@ -194,7 +194,7 @@ def Tau(lam,vel,X,N, b,z):
     return(taust)
 
 def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
-    
+    print('get_cells', vR,hv)
     h = model.h
     incli = model.incl
 
@@ -233,7 +233,7 @@ def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
     return(ypos,zpos, probs, velos)
 
 def los_vel(model, y, D, alpha, vR, hv, v_inf=0):
-
+    print('los_vel', vR, hv)
     v_los_inf = (v_inf * np.sin(model.incl_rad)) * (y/(np.sqrt((y**2) + D**2)))
     al_rad = np.radians(alpha)
 
@@ -379,6 +379,7 @@ class Sample:
             alpha = alpha_i[i]
 
             model = cgm.Disco(h, random_inclis_i[i], Rcore=0.1)
+            print('loop', random_vels_i[i],hv)
             cells = get_cells(model,d,alpha,csize, random_r_vir_i[i],prob_r_cs,random_vels_i[i],hv,self.filling_factor,  rmax, por_r_vir)
             results = [0]*1
             results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
