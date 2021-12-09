@@ -375,7 +375,7 @@ class Sample:
         print('before loop')
         for i in range(sample_size):
             print('running samile ', i)
-            print('loop',bs,csize,h,hv)
+            print('loop',prob_r_cs,csize,hv)
             d = d_i[i]
             alpha = alpha_i[i]
 
