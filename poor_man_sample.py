@@ -70,20 +70,22 @@ def get_sample(bla):
     print('empieza:', bla)
     bs, csize, hs, h_v = bla[0], bla[1],bla[2], bla[3]
     exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=hv)
+    print('crea:', bla)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
+    print('calcula:', bla)
     Wr = e3_a_1[8]
     D = e3_a_1[3]
     R_vir = e3_a_1[7]
     specs = e3_a_1[1]
-    print(bs, csize, hs, h_v)
+    print('termina',bs, csize, hs, h_v)
     return(Wr, D, R_vir, specs)
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, groups)
     
     
-for r in results:
-    print(r)
+#for r in results:
+    #print(r)
 
     
 '''EW_results = results[:][0]
