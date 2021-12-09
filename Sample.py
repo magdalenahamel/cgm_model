@@ -242,6 +242,22 @@ def los_vel(model, y, D, alpha, vR, hv, v_inf=0):
         #print('vel', vr)
     return(vr)
 
+xs = np.linspace(-200,200,2*200)
+ys = np.linspace(-200,200,2*200)
+x, y = np.meshgrid(xs, ys)
+print('before csu')
+d_alpha_t = csu.xy2alpha(x, y)
+print('after csu')
+ds = []
+alphas = []
+for i in range(len(d_alpha_t[0])):
+    for j in range(len(d_alpha_t[0][0])):
+        if d_alpha_t[0][i][j]>200:
+           pass
+        else:
+           ds.append(d_alpha_t[0][i][j])
+           alphas.append(d_alpha_t[1][i][j])
+
 
 """This Class Sample represents a sample of MgII absorbers from Galaxies with the model Disco"""
 
@@ -279,7 +295,7 @@ class Sample:
         print('before csu')
         d_alpha_t = csu.xy2alpha(x, y)
         print('after csu')
-        ds = []
+        '''ds = []
         alphas = []
         for i in range(len(d_alpha_t[0])):
             for j in range(len(d_alpha_t[0][0])):
@@ -288,7 +304,7 @@ class Sample:
                 else:
                     ds.append(d_alpha_t[0][i][j])
                     alphas.append(d_alpha_t[1][i][j])
-        prrint('runed alphas')
+        prrint('runed alphas')'''
         #wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
         #vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
 
@@ -340,7 +356,7 @@ class Sample:
         random_nr_clouds_pow_i = []
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
-
+        print('before loop')
         for i in range(sample_size):
             print('running samile i')
             d = d_i[i]
@@ -358,6 +374,7 @@ class Sample:
             equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i]+20, zabs,  w_pix)
             random_equi_wid.append(equi_wid_i)
             #print(i)
+        print('after loop')
 
         return(np.asarray([np.asarray(random_nr_clouds),
         np.asarray(random_specs),
