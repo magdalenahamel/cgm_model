@@ -262,7 +262,7 @@ class Sample:
 
 
     def Nielsen_sample(self, prob_r_cs, rmax, por_r_vir):
-        print('runing sample')
+        print('runing sample bla')
         dmax = self.dmax
         filling_factor = self.filling_factor
         dmax = self.dmax
@@ -276,8 +276,9 @@ class Sample:
         xs = np.linspace(-dmax,dmax,2*dmax)
         ys = np.linspace(-dmax,dmax,2*dmax)
         x, y = np.meshgrid(xs, ys)
+        print('before csu')
         d_alpha_t = csu.xy2alpha(x, y)
-
+        print('after csu')
         ds = []
         alphas = []
         for i in range(len(d_alpha_t[0])):
