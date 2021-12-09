@@ -75,7 +75,7 @@ def sin_i_dist(y, ymin):
     return(Ay * y / np.sqrt(1-(y**2)))
 
 sinivals = np.linspace(np.sin(np.radians(5.7)),0.99,100)
-fN = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
+fi = RanDist(sinivals, sin_i_dist(sinivals,np.radians(5.7)))
 
 '''Doppler parameter distribution'''
 
@@ -348,7 +348,7 @@ class Sample:
 
         print('4')
         alpha_i = random.choices(alphas, k=sample_size)
-        print('selected alpha', alpha_i)
+        #print('selected alpha', alpha_i)
         #d_i = random.choices(ds, k=sample_size)
         print('5')
         d_i = f_D_C.random(sample_size)
@@ -362,8 +362,10 @@ class Sample:
         random_r_vir_i = random_r_vir_i.to(u.kpc).value
 
         print('7')
-        random_inclis_i = fN.random(sample_size)
+        random_inclis_i = fi.random(sample_size)
+        print('inclis rad', random_rad_i )
         random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
+        print('inclis deg', random_inclis_i )
         print('8')
         random_nr_clouds_pow_i = []
         random_specs_pow_i = []
