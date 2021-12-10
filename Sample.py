@@ -287,11 +287,14 @@ def get_nielsen_sample(par_param,  prob_r_cs,csize,hv, filling_factor,rmax,por_r
     model = cgm.Disco(h, random_inclis_i, Rcore=0.1)
             #print('loop',bs,csize,h,hv)
     cells = get_cells(model,d,alpha,csize, random_r_vir_i,prob_r_cs,random_vels_i,hv, filling_factor,  rmax, por_r_vir)
+    print('get_cells_runed')
     results = [0]*1
     results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
+    print('get_clouds_runed')
     results_nr = csu.nr_clouds(results, 6.6)
     b = fNb.random(len(results[0]))
     speci = averagelos(model, d, alpha, wave, 1,1, zabs, csize, b, 0, random_vels_i, hv, 0, results)
+    print('averagelos_runed')
     equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i+20, zabs,  w_pix)
     return(equi_wid_i, results_nr[0], speci)
    
