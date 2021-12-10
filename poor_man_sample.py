@@ -57,13 +57,14 @@ for l in range(len(bs)):
         results_Wr.append(e3_a_1[8])
         results_D.append(e3_a_1[3])
         results_R_vir.append(e3_a_1[7])
-        results_specs.append(e3_a_1[1])
+        results_specs.append(e3_a_1[1])'''
                 
                 
-results_Wr_r = np.reshape(results_Wr, (10,10,300))
-results_D_r = np.reshape(results_D, (10,10,300))
-results_R_vir_r = np.reshape(results_R_vir, (10,10,300))
-results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
+results_Wr_r = np.reshape(results_Wr, (2,2,2,2,300))
+results_D_r = np.reshape(results_D, (2,2,2,2,300))
+results_R_vir_r = np.reshape(results_R_vir, (2,2,2,2,300))
+results_r = [results_Wr_r, results_D_r, results_R_vir_r]
+specs_r = np.reshape(specs_results, (2,2,2,2,300,len(wave)))
 
 ### Multiprocess ###
 
@@ -105,8 +106,8 @@ EW_r = np.reshape(EW_results, (7,7,7,7,300))
 D_r = np.reshape(D_results, (7,7,7,7,300))
 R_vir_r = np.reshape(R_vir_results, (7,7,7,7,300))
 specs_r = np.reshape(specs_results, (7,7,7,7,300,len(wave)))
-results_r = [results_Wr_r, results_D_r, results_R_vir_r]
+results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 
-np.save('mp_mcmc_6', results_r)
-np.save('mp_mcmc_6_specs',specs_r)'''
+np.save('mp_mcmc_7', results_r)
+np.save('mp_mcmc_7_specs',specs_r)
