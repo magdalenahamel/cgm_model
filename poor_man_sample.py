@@ -61,6 +61,7 @@ for l in range(len(bs)):
                 results_Wr.append(e3_a_1[8])
                 results_D.append(e3_a_1[3])
                 results_R_vir.append(e3_a_1[7])
+                results_specs.append(e3_a_1[1])
 
 '''for l in range(len(bs)):
     for i in range(len(csize)):
