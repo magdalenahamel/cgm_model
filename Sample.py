@@ -28,6 +28,10 @@ from astropy.cosmology import FlatLambdaCDM
 import importlib
 from numpy import float32
 
+import concurrent.futures
+import itertools
+import functools
+
 #### Define the spectral resolution ####
 
 zabs = 0.77086
@@ -271,6 +275,26 @@ for i in range(len(d_alpha_t[0])):
         else:
            ds.append(d_alpha_t[0][i][j])
            alphas.append(d_alpha_t[1][i][j])
+            
+def get_nielsen_sample(par_param,  prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix):
+    print('running get_nielsen_sample')
+    # print('loop',prob_r_cs,csize,hv)
+    d = par_param[0]
+    alpha = par_param[1]
+    random_inclis_i = par_param[2] 
+    random_r_vir_i = par_param[3] 
+    random_vels_i = par_param[4]
+    model = cgm.Disco(h, random_inclis_i, Rcore=0.1)
+            #print('loop',bs,csize,h,hv)
+    cells = get_cells(model,d,alpha,csize, random_r_vir_i,prob_r_cs,random_vels_i,hv, filling_factor,  rmax, por_r_vir)
+    results = [0]*1
+    results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
+    results_nr = csu.nr_clouds(results, 6.6)
+    b = fNb.random(len(results[0]))
+    speci = averagelos(model, d, alpha, wave, 1,1, zabs, csize, b, 0, random_vels_i, hv, 0, results)
+    equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i+20, zabs,  w_pix)
+    return(equi_wid_i, results_nr[0], speci)
+   
 
 #print('initial alpha', alphas)
 """This Class Sample represents a sample of MgII absorbers from Galaxies with the model Disco"""
@@ -292,7 +316,7 @@ class Sample:
 
 
     def Nielsen_sample(self, prob_r_cs, rmax, por_r_vir):
-        print('runing sample bla')
+        print('runing Nielsen_sample')
         dmax = self.dmax
         filling_factor = self.filling_factor
         dmax = self.dmax
@@ -303,18 +327,6 @@ class Sample:
         hv = self.hv
         sample_size = self.sample_size
 
-        
-        #print('after csu')
-        '''ds = []
-        alphas = []
-        for i in range(len(d_alpha_t[0])):
-            for j in range(len(d_alpha_t[0][0])):
-                if d_alpha_t[0][i][j]>dmax:
-                    pass
-                else:
-                    ds.append(d_alpha_t[0][i][j])
-                    alphas.append(d_alpha_t[1][i][j])
-        prrint('runed alphas')'''
         #wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
         #vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
 
@@ -373,7 +385,36 @@ class Sample:
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
         #print('before loop')
-        for i in range(sample_size):
+        
+        partial_params = [[d_i[i], alpha_i[i], random_inclis_i[i], random_r_vir_i[i], random_vels_i[i]] for i range(sample_size)]
+        print('defined partial_params)
+
+        partial_get_niel_samp = functools.partial(get_nielsen_sample,  prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix)
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            results = list(executor.map(partial_get_niel_samp, partial_params))
+        
+       
+        print('executor.map ready')
+        
+        random_equi_wid = [r[0] for r in results]
+        random_nr_clouds = [r[1] for r in results]
+        random_specs = [r[2] for r in results]
+        
+       # (equi_wid_i, results_nr[0], speci)
+
+        return(np.asarray([np.asarray(random_nr_clouds),
+        np.asarray(random_specs),
+        np.asarray(alpha_i),
+        np.asarray(d_i),
+        np.asarray(random_vels_i),
+        np.asarray(random_b),
+        np.asarray(random_inclis_i),
+        np.asarray(random_r_vir_i),
+        np.asarray(random_equi_wid)]))
+
+
+
+ '''for i in range(sample_size):
             print('running samile ', i)
             print('loop',prob_r_cs,csize,hv)
             d = d_i[i]
@@ -391,132 +432,4 @@ class Sample:
             random_nr_clouds.append(results_nr[0])
             equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i]+20, zabs,  w_pix)
             random_equi_wid.append(equi_wid_i)
-            #print(i)
-        #print('after loop')
-
-        return(np.asarray([np.asarray(random_nr_clouds),
-        np.asarray(random_specs),
-        np.asarray(alpha_i),
-        np.asarray(d_i),
-        np.asarray(random_vels_i),
-        np.asarray(random_b),
-        np.asarray(random_inclis_i),
-        np.asarray(random_r_vir_i),
-        np.asarray(random_equi_wid)]))
-
-
-'''def Chen_sample(self, prob_r_cs, rmax, por_r_vir):
-    dmax = self.dmax
-    filling_factor = self.filling_factor
-    dmax = self.dmax
-    h = self.h
-    w_pix = self.w_pix
-    zabs = self.zabs
-    csize = self.csize
-    hv = self.hv
-    sample_size = self.sample_size
-
-    xs = np.linspace(-dmax,dmax,2*dmax)
-    ys = np.linspace(-dmax,dmax,2*dmax)
-    x, y = np.meshgrid(xs, ys)
-    d_alpha_t = csu.xy2alpha(x, y)
-
-    ds = []
-    alphas = []
-    for i in range(len(d_alpha_t[0])):
-        for j in range(len(d_alpha_t[0][0])):
-            if d_alpha_t[0][i][j]>dmax:
-                pass
-            else:
-                ds.append(d_alpha_t[0][i][j])
-                alphas.append(d_alpha_t[1][i][j])
-
-    wave = np.arange(4849.58349609375,5098.33349609375+0.125, w_pix)
-    vels_wave = (const.c.to('km/s').value * ((wave/ (2796.35 * (1 + zabs))) - 1))
-
-
-    z_median = np.median(z_gal_magiicat)
-    R_vir_min = np.min(R_vir_magiicat)
-    R_vir_max = np.max(R_vir_magiicat)
-
-    cosmo = FlatLambdaCDM(H0=70, Om0=0.3)
-    H = cosmo.H(z_median)
-    vel_min = R_vir_min * u.kpc * H / 0.1
-    vel_min = vel_min.to(u.km/u.second).value
-
-    vel_max = R_vir_max * u.kpc * H / 0.1
-    vel_max = vel_max.to(u.km/u.second).value
-
-    vels = np.linspace(vel_min,vel_max,1000)
-
-    vels_dist = rot_vel_dist(vels,0.061,10**2.06, 0.66, 2.10)
-
-
-    fN_v = RanDist(vels, vels_dist)
-
-
-
-
-
-    d_alpha = list(zip(ds,alphas))
-
-    random_nr_clouds = []
-    random_specs = []
-    random_alphas = []
-    random_im_par = []
-    random_vels = []
-    random_b = []
-    random_inclis = []
-    random_r_vir = []
-    random_equi_wid = []
-
-
-    alpha_i = random.choices(alphas, k=sample_size)
-    #d_i = random.choices(ds, k=sample_size)
-    d_i = f_D_chen.random(sample_size)
-
-
-    random_vels_i = f_v.random(sample_size)
-
-    #random_vels_i = fN_v.random(sample_size)
-    random_r_vir_i = (random_vels_i * u.km /u.second)*0.1/H
-    random_r_vir_i = random_r_vir_i.to(u.kpc).value
-
-
-    random_inclis_i = fN.random(sample_size)
-    random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
-    random_nr_clouds_pow_i = []
-    random_specs_pow_i = []
-    random_equi_wid_pow_i =[]
-
-
-
-
-
-
-    for i in range(sample_size):
-        d = d_i[i]
-        alpha = alpha_i[i]
-
-        model = cgm.Disco(h, random_inclis_i[i], Rcore=0.1)
-        cells = get_cells(model,d,alpha,csize, random_r_vir_i[i],prob_r_cs,random_vels_i[i],hv,self.filling_factor,  rmax, por_r_vir)
-        results = [0]*1
-        results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
-        results_nr = csu.nr_clouds(results, 6.6)
-        b = fNb.random(len(results[0]))
-        speci = averagelos(model, d, alpha, wave, 1,1, zabs, csize, b, 0, random_vels_i[i], hv, 0, results)
-        random_specs.append(speci)
-        random_nr_clouds.append(results_nr[0])
-        equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i], zabs,  w_pix)
-        random_equi_wid.append(equi_wid_i)
-        #print(i)
-
-    return(np.asarray([np.asarray(random_nr_clouds),
-    np.asarray(random_specs),
-    np.asarray(alpha_i),
-    np.asarray(d_i),
-    np.asarray(random_vels_i),
-    np.asarray(random_b),
-    np.asarray(random_inclis_i),
-    np.asarray(random_r_vir_i),
-    np.asarray(random_equi_wid)]))'''
+            #print(i)'''
