@@ -392,8 +392,9 @@ class Sample:
         
         
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            results = list(executor.map(partial_get_niel_samp, partial_params))
-        
+            results = executor.map(partial_get_niel_samp, partial_params)
+            
+        result_list= list(results)
        
         print('executor.map ready')
         
