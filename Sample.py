@@ -399,14 +399,14 @@ class Sample:
         
         
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            results = executor.map(partial_get_niel_samp, partial_params)
-            result_list= list(results)
+            results = list(executor.map(partial_get_niel_samp, partial_params))
+            #result_list= list(results)
        
         print('executor.map ready')
         print('result_list',result_list)
-        random_equi_wid = [r[0] for r in results_list]
-        random_nr_clouds = [r[1] for r in results_list]
-        random_specs = [r[2] for r in results_list]
+        random_equi_wid = [r[0] for r in results]
+        random_nr_clouds = [r[1] for r in results]
+        random_specs = [r[2] for r in results]
         
        # (equi_wid_i, results_nr[0], speci)
 
