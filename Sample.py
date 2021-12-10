@@ -276,7 +276,7 @@ for i in range(len(d_alpha_t[0])):
            ds.append(d_alpha_t[0][i][j])
            alphas.append(d_alpha_t[1][i][j])
             
-def get_nielsen_sample(par_param,  prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix):
+def get_nielsen_sample(prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix, par_param):
     print('running get_nielsen_sample')
     print('pars, prob_r_cs',par_param,  prob_r_cs) 
     # print('loop',prob_r_cs,csize,hv)
