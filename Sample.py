@@ -359,8 +359,6 @@ class Sample:
         random_inclis = []
         random_r_vir = []
         random_equi_wid = []
-
-       # print('4')
         alpha_i = random.choices(alphas, k=sample_size)
         #print('selected alpha', alpha_i)
         #d_i = random.choices(ds, k=sample_size)
@@ -385,7 +383,7 @@ class Sample:
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
         #print('before loop')
-        partial_params = [[d_i[i], alpha_i[i], random_inclis_i[i], random_r_vir_i[i], random_vels_i[i]] for i range(sample_size)]
+        partial_params = [[d_i[i], alpha_i[i], random_inclis_i[i], random_r_vir_i[i], random_vels_i[i]] for i in range(sample_size)]
         
         print('defined partial_params')
 
