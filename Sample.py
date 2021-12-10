@@ -414,8 +414,7 @@ class Sample:
         np.asarray(random_equi_wid)]))
 
 
-
- '''for i in range(sample_size):
+'''for i in range(sample_size):
             print('running samile ', i)
             print('loop',prob_r_cs,csize,hv)
             d = d_i[i]
