@@ -19,11 +19,15 @@ def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
 
 #### define grids for the poor mans mcmc
 
-bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = np.linspace(0.01,1,7) #poner en escala mas separada
-hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
-hv = np.linspace(0, 20,7) #bajar maximo a 100
+#bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+#csize = np.linspace(0.01,1,7) #poner en escala mas separada
+#hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
+#hv = np.linspace(0, 20,7) #bajar maximo a 100
 
+bs = np.linspace(0.1,4,2) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+csize = np.linspace(1,10,2) #poner en escala mas separada
+hs = np.linspace(10,20,2) #bajar un poco para que no sea un  1,10,20
+hv = np.linspace(0, 20,2) #bajar maximo a 100
 params = [bs,csize,hs,hv]
 
 
