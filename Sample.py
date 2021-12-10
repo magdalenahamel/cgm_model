@@ -280,12 +280,15 @@ def get_nielsen_sample(par_param,  prob_r_cs,csize,hv, filling_factor,rmax,por_r
     print('running get_nielsen_sample')
     # print('loop',prob_r_cs,csize,hv)
     d = par_param[0]
+    print('defi primer param')
     alpha = par_param[1]
     random_inclis_i = par_param[2] 
     random_r_vir_i = par_param[3] 
     random_vels_i = par_param[4]
+    print('defi seg param')
     model = cgm.Disco(h, random_inclis_i, Rcore=0.1)
             #print('loop',bs,csize,h,hv)
+    print('defi primer model')
     cells = get_cells(model,d,alpha,csize, random_r_vir_i,prob_r_cs,random_vels_i,hv, filling_factor,  rmax, por_r_vir)
     print('get_cells_runed')
     results = [0]*1
