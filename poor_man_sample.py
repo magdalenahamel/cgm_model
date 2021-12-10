@@ -33,12 +33,12 @@ params = [bs,csize,hs,hv]
 
 
 ### run the model in the parameter grid
-'''results_Wr = []
+results_Wr = []
 results_D = []
 results_R_vir = []
-results_specs = []'''
+results_specs = []
 
-'''for l in range(len(bs)):
+for l in range(len(bs)):
     for i in range(len(csize)):
         for j in range(len(hs)):
             for k in range(len(hv)):
@@ -47,7 +47,7 @@ results_specs = []'''
                 e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
                 results_Wr.append(e3_a_1[8])
                 results_D.append(e3_a_1[3])
-                results_R_vir.append(e3_a_1[7])'''
+                results_R_vir.append(e3_a_1[7])
 
 '''for l in range(len(bs)):
     for i in range(len(csize)):
@@ -67,11 +67,11 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 ### Multiprocess ###
 
-groups = list(list(itertools.product(bs,csize,hs,hv)))
+#groups = list(list(itertools.product(bs,csize,hs,hv)))
 
 #print('g', groups)
 
-def get_sample(bla):
+'''def get_sample(bla):
     print('empieza:', bla)
     bs, csize, hs, h_v = bla[0], bla[1],bla[2], bla[3]
     exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=h_v)
@@ -87,7 +87,7 @@ def get_sample(bla):
     
     
 results = map(get_sample, groups)
-list=list(results)
+list=list(results)'''
 '''with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, groups)
     list = list(results)'''
