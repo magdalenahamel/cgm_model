@@ -64,7 +64,7 @@ results_Wr_r = np.reshape(results_Wr, (2,2,2,2,300))
 results_D_r = np.reshape(results_D, (2,2,2,2,300))
 results_R_vir_r = np.reshape(results_R_vir, (2,2,2,2,300))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
-specs_r = np.reshape(specs_results, (2,2,2,2,300,len(wave)))
+specs_r = np.reshape(results_specs, (2,2,2,2,300,len(wave)))
 
 ### Multiprocess ###
 
