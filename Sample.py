@@ -194,7 +194,7 @@ def Tau(lam,vel,X,N, b,z):
     return(taust)
 
 def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
-    print('get_cells', vR,hv)
+    #print('get_cells', vR,hv)
     h = model.h
     incli = model.incl
 
@@ -206,14 +206,14 @@ def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
     #print('y0,alpha,incli',y0,alpha,incli)
     y1 = ((h/2)-n)/m
     y2 = (-(h/2)-n)/m
-    print('hnm', h,n,m)
+    #print('hnm', h,n,m)
     mindis = np.sqrt(2*(size**2))/2
     z1 = h/2
     z2 = -h/2
     b = -1
     zgrid = np.arange((-h/2) + (size/2), (h/2) + (size/2), size)
-    print('y1', y1)
-    print('size',size)
+    #print('y1', y1)
+    #print('size',size)
     ymin = int(y1/size) * size + (size/2)
     ymax = int(y2/size)*size +(size/2)
 
@@ -233,7 +233,7 @@ def get_cells(model,D,alpha,size,r_0,p_r_0, vR,hv,prob_func,  rmax, por_r_vir):
     return(ypos,zpos, probs, velos)
 
 def los_vel(model, y, D, alpha, vR, hv, v_inf=0):
-    print('los_vel', vR, hv)
+    #print('los_vel', vR, hv)
     v_los_inf = (v_inf * np.sin(model.incl_rad)) * (y/(np.sqrt((y**2) + D**2)))
     al_rad = np.radians(alpha)
 
@@ -259,9 +259,9 @@ def los_vel(model, y, D, alpha, vR, hv, v_inf=0):
 xs = np.linspace(-200,200,2*200)
 ys = np.linspace(-200,200,2*200)
 x, y = np.meshgrid(xs, ys)
-print('before csu')
+#print('before csu')
 d_alpha_t = csu.xy2alpha(x, y)
-print('after csu')
+#print('after csu')
 ds = []
 alphas = []
 for i in range(len(d_alpha_t[0])):
@@ -322,12 +322,12 @@ class Sample:
         z_median = np.median(z_gal_magiicat)
         R_vir_min = np.min(R_vir_magiicat)
         R_vir_max = np.max(R_vir_magiicat)
-        print('1')
+        #print('1')
         cosmo = FlatLambdaCDM(H0=70, Om0=0.3)
         H = cosmo.H(z_median)
         vel_min = R_vir_min * u.kpc * H / 0.1
         vel_min = vel_min.to(u.km/u.second).value
-        print('2')
+        #print('2')
         vel_max = R_vir_max * u.kpc * H / 0.1
         vel_max = vel_max.to(u.km/u.second).value
 
@@ -335,7 +335,7 @@ class Sample:
 
         vels_dist = rot_vel_dist(vels,0.061,10**2.06, 0.66, 2.10)
         fN_v = RanDist(vels, vels_dist)
-        print('3')
+        #print('3')
         d_alpha = list(zip(ds,alphas))
 
         random_nr_clouds = []
@@ -348,31 +348,31 @@ class Sample:
         random_r_vir = []
         random_equi_wid = []
 
-        print('4')
+       # print('4')
         alpha_i = random.choices(alphas, k=sample_size)
         #print('selected alpha', alpha_i)
         #d_i = random.choices(ds, k=sample_size)
-        print('5')
+        #print('5')
         d_i = f_D_C.random(sample_size)
 
-        print('6')
+        #print('6')
         random_vels_i = f_v.random(sample_size)
-        print('6a')
+        #print('6a')
         #random_vels_i = fN_v.random(sample_size)
         random_r_vir_i = (random_vels_i * u.km /u.second)*0.1/H
-        print('6b')
+        #print('6b')
         random_r_vir_i = random_r_vir_i.to(u.kpc).value
 
-        print('7')
+        #print('7')
         random_inclis_i = f_D_i.random(sample_size)
         #print('inclis rad', random_inclis_i )
         random_inclis_i = np.degrees(np.arcsin(random_inclis_i))
         #print('inclis deg', random_inclis_i )
-        print('8')
+        #print('8')
         random_nr_clouds_pow_i = []
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
-        print('before loop')
+        #print('before loop')
         for i in range(sample_size):
             print('running samile ', i)
             print('loop',prob_r_cs,csize,hv)
@@ -392,7 +392,7 @@ class Sample:
             equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i[i]+20, zabs,  w_pix)
             random_equi_wid.append(equi_wid_i)
             #print(i)
-        print('after loop')
+        #print('after loop')
 
         return(np.asarray([np.asarray(random_nr_clouds),
         np.asarray(random_specs),
