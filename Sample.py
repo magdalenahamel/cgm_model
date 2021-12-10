@@ -277,11 +277,11 @@ for i in range(len(d_alpha_t[0])):
            alphas.append(d_alpha_t[1][i][j])
             
 def get_nielsen_sample(prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix, par_param):
-    print('running get_nielsen_sample')
+    #print('running get_nielsen_sample')
     #print('pars, prob_r_cs',par_param,  prob_r_cs) 
     # print('loop',prob_r_cs,csize,hv)
     d = par_param[0]
-    print('defi primer param')
+    #print('defi primer param')
     alpha = par_param[1]
     random_inclis_i = par_param[2] 
     random_r_vir_i = par_param[3] 
@@ -323,7 +323,7 @@ class Sample:
 
 
     def Nielsen_sample(self, prob_r_cs, rmax, por_r_vir):
-        print('runing Nielsen_sample')
+        #print('runing Nielsen_sample')
         dmax = self.dmax
         filling_factor = self.filling_factor
         dmax = self.dmax
@@ -402,8 +402,8 @@ class Sample:
             results = list(executor.map(partial_get_niel_samp, partial_params))
             #result_list= list(results)
        
-        print('executor.map ready')
-        print('result_list',results)
+        #print('executor.map ready')
+        #print('result_list',results)
         random_equi_wid = [r[0] for r in results]
         random_nr_clouds = [r[1] for r in results]
         random_specs = [r[2] for r in results]
