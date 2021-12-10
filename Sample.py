@@ -385,11 +385,14 @@ class Sample:
         random_specs_pow_i = []
         random_equi_wid_pow_i =[]
         #print('before loop')
-        
         partial_params = [[d_i[i], alpha_i[i], random_inclis_i[i], random_r_vir_i[i], random_vels_i[i]] for i range(sample_size)]
-        print('defined partial_params)
+        
+        print('defined partial_params')
 
+        
         partial_get_niel_samp = functools.partial(get_nielsen_sample,  prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix)
+        
+        
         with concurrent.futures.ProcessPoolExecutor() as executor:
             results = list(executor.map(partial_get_niel_samp, partial_params))
         
