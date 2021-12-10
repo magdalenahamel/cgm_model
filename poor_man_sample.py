@@ -77,7 +77,7 @@ def get_sample(bla):
     exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize, h=hs, hv=h_v)
     print('crea:', bs, csize, hs, h_v)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
-    print('calcula:', bla)
+    #print('calcula:', bla)
     Wr = e3_a_1[8]
     D = e3_a_1[3]
     R_vir = e3_a_1[7]
@@ -87,7 +87,7 @@ def get_sample(bla):
     
 with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, groups)
-    
+    list = list(results)
     
 #for r in results:
     #print(r)
