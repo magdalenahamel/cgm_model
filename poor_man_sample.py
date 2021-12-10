@@ -85,9 +85,12 @@ def get_sample(bla):
     print('termina',bs, csize, hs, h_v)
     return(Wr, D, R_vir, specs)
     
-with concurrent.futures.ProcessPoolExecutor() as executor:
+    
+results = map(get_sample, groups)
+list=list(results)
+'''with concurrent.futures.ProcessPoolExecutor() as executor:
     results = executor.map(get_sample, groups)
-    list = list(results)
+    list = list(results)'''
     
 #for r in results:
     #print(r)
