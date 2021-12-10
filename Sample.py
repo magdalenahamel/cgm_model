@@ -403,7 +403,7 @@ class Sample:
             #result_list= list(results)
        
         print('executor.map ready')
-        print('result_list',result_list)
+        print('result_list',results)
         random_equi_wid = [r[0] for r in results]
         random_nr_clouds = [r[1] for r in results]
         random_specs = [r[2] for r in results]
