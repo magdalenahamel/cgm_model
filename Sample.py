@@ -278,7 +278,7 @@ for i in range(len(d_alpha_t[0])):
             
 def get_nielsen_sample(prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix, par_param):
     print('running get_nielsen_sample')
-    print('pars, prob_r_cs',par_param,  prob_r_cs) 
+    #print('pars, prob_r_cs',par_param,  prob_r_cs) 
     # print('loop',prob_r_cs,csize,hv)
     d = par_param[0]
     print('defi primer param')
@@ -286,19 +286,19 @@ def get_nielsen_sample(prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h
     random_inclis_i = par_param[2] 
     random_r_vir_i = par_param[3] 
     random_vels_i = par_param[4]
-    print('defi seg param')
+   # print('defi seg param')
     model = cgm.Disco(h, random_inclis_i, Rcore=0.1)
             #print('loop',bs,csize,h,hv)
-    print('defi primer model')
+    #print('defi primer model')
     cells = get_cells(model,d,alpha,csize, random_r_vir_i,prob_r_cs,random_vels_i,hv, filling_factor,  rmax, por_r_vir)
-    print('get_cells_runed')
+    #print('get_cells_runed')
     results = [0]*1
     results = [get_clouds(cells[0],cells[1],cells[2],cells[3]) for x in results]
-    print('get_clouds_runed')
+    #print('get_clouds_runed')
     results_nr = csu.nr_clouds(results, 6.6)
     b = fNb.random(len(results[0]))
     speci = averagelos(model, d, alpha, wave, 1,1, zabs, csize, b, 0, random_vels_i, hv, 0, results)
-    print('averagelos_runed')
+    #print('averagelos_runed')
     equi_wid_i = csu.eq_w(speci, vels_wave, random_vels_i+20, zabs,  w_pix)
     return(equi_wid_i, results_nr[0], speci)
    
@@ -392,7 +392,7 @@ class Sample:
         #print('before loop')
         partial_params = [[d_i[i], alpha_i[i], random_inclis_i[i], random_r_vir_i[i], random_vels_i[i]] for i in range(sample_size)]
         
-        print('defined partial_params')
+        #print('defined partial_params')
 
         
         partial_get_niel_samp = functools.partial(get_nielsen_sample,  prob_r_cs,csize,hv, filling_factor,rmax,por_r_vir, zabs,h, wave, vels_wave, w_pix)
@@ -403,10 +403,10 @@ class Sample:
             result_list= list(results)
        
         print('executor.map ready')
-        
-        random_equi_wid = [r[0] for r in results]
-        random_nr_clouds = [r[1] for r in results]
-        random_specs = [r[2] for r in results]
+        print('result_list',result_list)
+        random_equi_wid = [r[0] for r in results_list]
+        random_nr_clouds = [r[1] for r in results_list]
+        random_specs = [r[2] for r in results_list]
         
        # (equi_wid_i, results_nr[0], speci)
 
