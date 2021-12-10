@@ -11,6 +11,8 @@ import Sample
 import concurrent.futures
 import itertools
 
+from astropy import constants as const
+
 ###possible filling factor functions
 
 def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
