@@ -570,7 +570,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
     EW = [r[1] for r in results]
     nr = [r[2] for r in results]
     specs = [r[3] for r in results]
-    print('specs')                 
+    print('specs', specs)                 
     print('starts tpcf',theta_max)
     tpcf = TPCF(specs)
     
