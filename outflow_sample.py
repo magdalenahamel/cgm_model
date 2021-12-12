@@ -545,7 +545,7 @@ def get_one_sample(r_0,theta_max,theta_min,zmax,size, vel,params):
     ds = params[0]
     alphas = params[1]
     inclis = params[2]
-    bla = averagelos(r_0,theta_max,theta_min, ds ,alphas ,inclis,zmax,size, vel, 1, 1, N,1.29, lam, neg_flow=False)
+    bla = averagelos(r_0,theta_max,theta_min, ds ,alphas ,inclis,zmax,size, vel, 1, 1,'nada' ,1.29, lam, neg_flow=False)
     bla1 = bla[0]
     nr = bla[1]
     ew = eq_w(bla1, vels_wave, 1000, 1.29, 0.05)
