@@ -564,7 +564,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
     ds = np.random.uniform(low=1, high=100, size=(200,))
     inclis = np.random.uniform(low=70, high=89, size=(200,))
     
-    partial_params = [[ds[i], alphaas[i], inclis[i] for i in range(200)]
+    partial_params = [[ds[i], alphas[i], inclis[i]] for i in range(200)]
     partial_get_one_sample = functools.partial(get_one_sample, r_0,theta_max,theta_min,zmax,size, vel)
     print('starts get_one_sample',theta_max)
     with concurrent.futures.ProcessPoolExecutor() as executor:
