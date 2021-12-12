@@ -8,6 +8,10 @@ from mpdaf.obj import Cube, WCS, WaveCoord
 from astropy import coordinates as coord
 import pandas as pd
 
+import concurrent.futures
+import itertools
+import functools
+
 def resolver_ecuacion_cuadrada(a, b, c):
     soluciones = [] # creamos una lista vacía para las soluciones
 
@@ -537,7 +541,60 @@ minor_error = np.abs(minor_tpcf['minus_error'].to_numpy() - minor_tpcf['plus_err
 
 vels_wave = (const.c.to('km/s').value * ((lam/ (2796.35 * (1 + 1.29))) - 1))
 
-def get_sample(N,theta_max,theta_min,r_0,size,vel):
+def get_one_sample(r_0,theta_max,theta_min,zmax,size, vel,params):
+    ds = params[0]
+    alphas = params[1]
+    inclis = params[2]
+    bla = averagelos(r_0,theta_max,theta_min, ds ,alphas ,inclis,zmax,size, vel, 1, 1, N,1.29, lam, neg_flow=False)
+    bla1 = bla[0]
+    nr = bla[1]
+    ew = eq_w(bla1, vels_wave, 1000, 1.29, 0.05)
+    ews_empty=ew
+    speci_empty=bla1
+    nr_clouds=nr
+    return(ds,ews_empty,nr_clouds,speci_empty)
+    
+def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
+    theta_max = params[0]
+    theta_min = params[1]
+    r_0 = params[2]
+    size = params[3]
+    vel = params[4]
+    alphas = np.random.uniform(low=-90, high=-45, size=(200,))
+    ds = np.random.uniform(low=1, high=100, size=(200,))
+    inclis = np.random.uniform(low=70, high=89, size=(200,))
+    
+    partial_params = [[ds[i], alphaas[i], inclis[i] for i in range(200)]
+    partial_get_one_sample = functools.partial(get_one_sample, r_0,theta_max,theta_min,zmax,size, vel)
+    print('starts get_one_sample',theta_max)
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+            results = list(executor.map(partial_get_one_sample, partial_params))
+    print('finish get_one_sample',theta_max)
+            
+    ds = [r[0] for r in results]
+    EW = [r[1] for r in results]
+    nr = [r[2] for r in results]
+    specs = [r[3] for r in results]
+                      
+    print('starts tpcf',theta_max)
+    tpcf = TPCF(specs)
+    
+    print('finish tpcf',theta_max)
+    return(ds,EW,nr,tpcf)
+    
+   ''' partial_params = [[d_s[i], alphas[i], inclis[i]] for i in range(sample_size)]
+    bla = averagelos(r_0,theta_max,theta_min, ds[i] ,alphas[i] ,inclis[i],zmax,size, vel, 1, 1, N,1.29, lam, neg_flow=False)
+    bla1 = bla[0]
+    nr = bla[1]
+    ew = eq_w(bla1, vels_wave, 1000, 1.29, 0.05)
+    ews_empty=ew
+    speci_empty=bla1
+    nr_clouds=nr
+    return(ds,ews_empty,nr_clouds)'''
+                            
+    
+
+'''def get_sample(theta_max,theta_min,r_0,size,vel, sample_size=200):
     ews_empty = []
     Ds_empty = []
     speci_empty = []
@@ -545,6 +602,19 @@ def get_sample(N,theta_max,theta_min,r_0,size,vel):
     alphas = np.random.uniform(low=-90, high=-45, size=(500,))
     ds = np.random.uniform(low=1, high=100, size=(500,))
     inclis = np.random.uniform(low=70, high=89, size=(500,))
+    
+    groups = list(list(itertools.product(theta_max,theta_min,r_0,size,vel)))
+    
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        results = list(executor.map(get_spec_tpcf, gropus))
+        
+    EW_results = results[:][0]
+    D_results = results[:][1]
+    R_vir_results = results[:][2]
+    specs_results = results[:][3]
+        
+        
+    tpcf_i = TPCF(speci_empty
 
     for i in range(len(alphas)):
 
@@ -561,7 +631,7 @@ def get_sample(N,theta_max,theta_min,r_0,size,vel):
         
     return(ews_empty,speci_empty,nr_clouds,ds)
     #Ds.append(result[0][i][j])
-    #MyData[:,j,i] = bla
+    #MyData[:,j,i] = bla'''
 
 from itertools import combinations
 
@@ -572,6 +642,7 @@ def TPCF(speci_empty):
     vels_abs = []
     speci_empty_t = np.asarray(speci_empty)[~cond]
     print(len(speci_empty_t))
+    
     for m in range(len(speci_empty_t)):
         print(m)
         gauss_specj = filtrogauss(45000,0.03,2796.35,speci_empty_t[m])
@@ -579,7 +650,7 @@ def TPCF(speci_empty):
         zabs=1.29
 
         cond_abs1 = gauss_specj < 0.98
-        cond_abs2 = np.abs(vels_wave) < 400
+        cond_abs2 = np.abs(vels_wave) < 800
         abs_gauss_spec_major = vels_wave[cond_abs1 & cond_abs2]
         abs_specs.append(abs_gauss_spec_major)
     #vels_abs_major_i = [abs(i-j) for i in abs_gauss_spec_major for j in abs_gauss_spec_major if i != j]
@@ -587,31 +658,38 @@ def TPCF(speci_empty):
 
 # Convert input list to a numpy array
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
-    bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
+    
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        result = executor.map(absdif, combinations(abs_specs_f, 2))
+   # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
     bins1 = np.arange(0,np.max(bla),5)
     bla2 = np.histogram(bla,bins=bins1)
     return(bla2)
 
+def absdif((a,b)):
+    return(abs(a -b))
 
-Ns = 10**14
 theta_maxs = [10,40,80]
 r_0 = 10
-size = 0.01
+size = 1
 vel = 200
 
 EWs = []
-specs = []
+tpcf = []
 nr_clouds = []
 ds_s = []
 
 for i in range(len(theta_maxs)):
-    bla = get_sample(Ns,theta_maxs[i],0,r_0,size,vel)
-    EWs.append(bla[0])
-    specs.append(bla[1])
+    print('iter', i)
+    bla = get_spec_tpcf(theta_maxs[i],theta_min,r_0,size,vel, zmax, sample_size = 200)
+    print('get_spec_tpcf finish:' i)
+    ds_s.append(bla[0])
+    EWs.append(bla[1])
     nr_clouds.append(bla[2])
-    ds_s.append(bla[3])
+    tpcf.append(bla[3])
+    
 
-np.save('out_EW_8', EWs)
+'''np.save('out_EW_8', EWs)
 np.save('out_specs_8', specs)
 np.save('out_nr_clouds_8', nr_clouds)
-np.save('out_ds_8', ds_s)
+np.save('out_ds_8', ds_s)'''
