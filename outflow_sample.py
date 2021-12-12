@@ -582,7 +582,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
     print('finish tpcf',theta_max)
     return(ds,EW,nr,tpcf)
     
-   ''' partial_params = [[d_s[i], alphas[i], inclis[i]] for i in range(sample_size)]
+    ''' partial_params = [[d_s[i], alphas[i], inclis[i]] for i in range(sample_size)]
     bla = averagelos(r_0,theta_max,theta_min, ds[i] ,alphas[i] ,inclis[i],zmax,size, vel, 1, 1, N,1.29, lam, neg_flow=False)
     bla1 = bla[0]
     nr = bla[1]
