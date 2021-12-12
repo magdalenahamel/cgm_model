@@ -666,7 +666,9 @@ def TPCF(speci_empty):
     bla2 = np.histogram(bla,bins=bins1)
     return(bla2)
 
-def absdif((a,b)):
+def absdif(bla):
+    a = bla[0]
+    b = bla[1]
     return(abs(a -b))
 
 theta_maxs = [10,40,80]
