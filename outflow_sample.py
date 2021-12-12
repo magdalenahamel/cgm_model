@@ -683,7 +683,7 @@ ds_s = []
 
 for i in range(len(theta_maxs)):
     print('iter', i)
-    bla = get_spec_tpcf(theta_maxs[i],theta_min,r_0,size,vel, zmax, sample_size = 200)
+    bla = get_spec_tpcf(theta_maxs[i],0,r_0,size,vel, zmax, sample_size = 200)
     print('get_spec_tpcf finish:', i)
     ds_s.append(bla[0])
     EWs.append(bla[1])
