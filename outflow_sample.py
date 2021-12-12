@@ -555,11 +555,6 @@ def get_one_sample(r_0,theta_max,theta_min,zmax,size, vel,params):
     return(ds,ews_empty,nr_clouds,speci_empty)
     
 def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
-    theta_max = params[0]
-    theta_min = params[1]
-    r_0 = params[2]
-    size = params[3]
-    vel = params[4]
     alphas = np.random.uniform(low=-90, high=-45, size=(200,))
     ds = np.random.uniform(low=1, high=100, size=(200,))
     inclis = np.random.uniform(low=70, high=89, size=(200,))
