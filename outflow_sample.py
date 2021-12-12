@@ -668,7 +668,7 @@ def absdif(bla):
 
 theta_maxs = [10,40,80]
 r_0 = 10
-size = 1
+size = 0.1
 vel = 200
 
 EWs = []
