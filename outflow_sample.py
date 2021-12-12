@@ -293,10 +293,10 @@ def get_cells(r0, theta,theta_min, D,alpha,incli, zmax, size, vel, neg_flow=Fals
         elif yz_pos:
             ypos_t = yz_pos[0]
             zpos_t = yz_pos[1]
-            print('pos')
+            #print('pos')
 
         elif yz_neg:
-            print('neg')
+            #print('neg')
             ypos_t = yz_neg[0]
             zpos_t = yz_neg[1]
 
@@ -306,11 +306,11 @@ def get_cells(r0, theta,theta_min, D,alpha,incli, zmax, size, vel, neg_flow=Fals
     else:
 
         if yz_pos:
-            print('yes')
+            #print('yes')
             ypos_t = yz_pos[0]
             zpos_t = yz_pos[1]
         else:
-            print('no')
+            #print('no')
             return(np.array([]), np.array([]), np.array([]), np.array([]))
 
     #print(ypos_t, zpos_t)
@@ -474,7 +474,7 @@ def Tau(lam,vel,X,N, b,z):
         f = [0.6155, 0.3054]
 
     gamma, mass = [2.68e8, 24.305]
-    c  = const.c.to('cm/s').value
+    c  = const.c.to('cm/s').value  
     sigma0 = 0.0263
     taus = []
     for i in range(len(lam0)):
@@ -570,7 +570,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
     EW = [r[1] for r in results]
     nr = [r[2] for r in results]
     specs = [r[3] for r in results]
-                      
+    print('specs')                 
     print('starts tpcf',theta_max)
     tpcf = TPCF(specs)
     
