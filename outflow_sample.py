@@ -657,7 +657,7 @@ def TPCF(speci_empty, nr_clouds):
     with concurrent.futures.ProcessPoolExecutor() as executor:
         result = list(executor.map(absdif, combinations(abs_specs_f, 2)))
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
-    bla2 = np.histogram(results,bins=minor_vel)
+    bla2 = np.histogram(result,bins=minor_vel)
     return(bla2)
 
 def absdif(bla):
