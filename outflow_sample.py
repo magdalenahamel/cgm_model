@@ -669,7 +669,7 @@ def absdif(bla):
 
 theta_maxs = [10,40,80]
 r_0 = 10
-size = 0.1
+size = 0.01
 vel = 200
 
 EWs = []
@@ -687,7 +687,7 @@ for i in range(len(theta_maxs)):
     tpcf.append(bla[3])
     
 
-np.save('out_EW_9', EWs)
-np.save('out_tpcf_9', tpcf)
-np.save('out_nr_clouds_9', nr_clouds)
-np.save('out_ds_9', ds_s)
+np.save('out_EW_10', EWs)
+np.save('out_tpcf_10', tpcf)
+np.save('out_nr_clouds_10', nr_clouds)
+np.save('out_ds_10', ds_s)
