@@ -554,12 +554,12 @@ def get_one_sample(r_0,theta_max,theta_min,zmax,size, vel,params):
     nr_clouds=nr
     return(ds,ews_empty,nr_clouds,speci_empty)
     
-def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 200):
-    alphas = np.random.uniform(low=-90, high=-45, size=(200,))
-    ds = np.random.uniform(low=1, high=100, size=(200,))
-    inclis = np.random.uniform(low=70, high=89, size=(200,))
+def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 100):
+    alphas = np.random.uniform(low=-90, high=-45, size=(100,))
+    ds = np.random.uniform(low=1, high=100, size=(100,))
+    inclis = np.random.uniform(low=70, high=89, size=(100,))
     
-    partial_params = [[ds[i], alphas[i], inclis[i]] for i in range(200)]
+    partial_params = [[ds[i], alphas[i], inclis[i]] for i in range(100)]
     partial_get_one_sample = functools.partial(get_one_sample, r_0,theta_max,theta_min,zmax,size, vel)
     print('starts get_one_sample',theta_max)
     with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -655,9 +655,9 @@ def TPCF(speci_empty, nr_clouds):
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
     
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        result = executor.map(absdif, combinations(abs_specs_f, 2))
+        result = list(executor.map(absdif, combinations(abs_specs_f, 2)))
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
-    bla2 = np.histogram(bla,bins=minor_vel)
+    bla2 = np.histogram(results,bins=minor_vel)
     return(bla2)
 
 def absdif(bla):
@@ -678,7 +678,7 @@ ds_s = []
 
 for i in range(len(theta_maxs)):
     print('iter', i)
-    bla = get_spec_tpcf(theta_maxs[i],0,r_0,size,vel, 200, sample_size = 300)
+    bla = get_spec_tpcf(theta_maxs[i],0,r_0,size,vel, 200, sample_size = 100)
     print('get_spec_tpcf finish:', i)
     ds_s.append(bla[0])
     EWs.append(bla[1])
