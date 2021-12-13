@@ -572,7 +572,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 300):
     specs = [r[3] for r in results]
     print('specs', specs)                 
     print('starts tpcf',theta_max)
-    tpcf = TPCF(specs)
+    tpcf = TPCF(specs, nr)
     
     print('finish tpcf',theta_max)
     return(ds,EW,nr,tpcf)
@@ -630,13 +630,13 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 300):
 
 from itertools import combinations
 
-def TPCF(speci_empty):
+def TPCF(speci_empty, nr_clouds):
     cond = np.asarray(nr_clouds) == 0
     gauss_specs = []
     abs_specs = []
     vels_abs = []
     speci_empty_t = np.asarray(speci_empty)[~cond]
-    print(len(speci_empty_t))
+    print('how many specs', len(speci_empty_t))
     
     for m in range(len(speci_empty_t)):
         print(m)
