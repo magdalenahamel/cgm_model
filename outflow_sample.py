@@ -658,7 +658,8 @@ def TPCF(speci_empty, nr_clouds):
         result = list(executor.map(absdif, combinations(abs_specs_f, 2)))
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
     bla2 = np.histogram(result,bins=minor_vel)
-    return(bla2)
+    bla_t = bla2[0]/len(result)
+    return(bla_t)
 
 def absdif(bla):
     print('absdif',bla)
@@ -686,7 +687,7 @@ for i in range(len(theta_maxs)):
     tpcf.append(bla[3])
     
 
-'''np.save('out_EW_8', EWs)
-np.save('out_specs_8', specs)
-np.save('out_nr_clouds_8', nr_clouds)
-np.save('out_ds_8', ds_s)'''
+np.save('out_EW_9', EWs)
+np.save('out_tpcf_9', tpcf)
+np.save('out_nr_clouds_9', nr_clouds)
+np.save('out_ds_9', ds_s)
