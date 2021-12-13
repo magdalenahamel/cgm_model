@@ -570,7 +570,7 @@ def get_spec_tpcf(theta_max,theta_min,r_0,size,vel, zmax, sample_size = 100):
     EW = [r[1] for r in results]
     nr = [r[2] for r in results]
     specs = [r[3] for r in results]
-    print('specs', specs)                 
+    #print('specs', specs)                 
     print('starts tpcf',theta_max)
     tpcf = TPCF(specs, nr)
     
@@ -653,23 +653,24 @@ def TPCF(speci_empty, nr_clouds):
 
 # Convert input list to a numpy array
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
-    
+    print('start tpcf')
     with concurrent.futures.ProcessPoolExecutor() as executor:
         result = list(executor.map(absdif, combinations(abs_specs_f, 2)))
+    print('finish tpcf')
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
     bla2 = np.histogram(result,bins=minor_vel)
     bla_t = bla2[0]/len(result)
     return(bla_t)
 
 def absdif(bla):
-    print('absdif',bla)
+    #print('absdif',bla)
     a = bla[0]
     b = bla[1]
     return(abs(a -b))
 
-theta_maxs = [10,40,80]
-r_0 = 10
-size = 0.01
+theta_maxs = 30
+r_0 = 5
+size = [0.01, 1]
 vel = 200
 
 EWs = []
@@ -677,9 +678,9 @@ tpcf = []
 nr_clouds = []
 ds_s = []
 
-for i in range(len(theta_maxs)):
+for i in range(len(size)):
     print('iter', i)
-    bla = get_spec_tpcf(theta_maxs[i],0,r_0,size,vel, 200, sample_size = 100)
+    bla = get_spec_tpcf(theta_maxs,0,r_0,size[i],vel, 200, sample_size = 100)
     print('get_spec_tpcf finish:', i)
     ds_s.append(bla[0])
     EWs.append(bla[1])
@@ -687,7 +688,7 @@ for i in range(len(theta_maxs)):
     tpcf.append(bla[3])
     
 
-np.save('out_EW_10', EWs)
-np.save('out_tpcf_10', tpcf)
-np.save('out_nr_clouds_10', nr_clouds)
-np.save('out_ds_10', ds_s)
+np.save('out_EW_11', EWs)
+np.save('out_tpcf_11', tpcf)
+np.save('out_nr_clouds_11', nr_clouds)
+np.save('out_ds_11', ds_s)
