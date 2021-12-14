@@ -28,10 +28,14 @@ minor_tpcf = pd.read_csv('2minor.txt', delimiter='     ', engine='python')
 major_tpcf = pd.read_csv('2major.txt', delimiter='     ', engine='python')
 
 minor_vel = minor_tpcf['vel'].to_numpy()
+minor_bins = minor_vel - 5
+minor_bins.append(minor_bins[-1] +10)
 minor_tpcf_val = minor_tpcf['TPCF'].to_numpy()
 minor_error = np.abs(minor_tpcf['minus_error'].to_numpy() - minor_tpcf['plus_error'].to_numpy())
       
 major_vel = major_tpcf['vel'].to_numpy()
+major_bins = major_vel - 5
+major_bins.append(major_bins[-1] +10)
 major_tpcf_val = major_tpcf['TPCF'].to_numpy()
 major_error = np.abs(major_tpcf['minus_error'].to_numpy() - major_tpcf['plus_error'].to_numpy())
 
@@ -82,9 +86,9 @@ def TPCF(params):
         return(bla_t)'''
     results = [absdif(co, pos_alpha) for co in comb]
     if pos_alpha == 'minor':
-       bla2 = np.histogram(results,bins=minor_vel)
+       bla2 = np.histogram(results,bins=minor_bins)
     elif pos_alpha == 'major':
-       bla2 = np.histogram(results,bins=major_vel)
+       bla2 = np.histogram(results,bins=major_bins)
     bla_t = bla2[0]/len(results)
     print(' end TPCF', pos_alpha)
     return(bla_t)
