@@ -132,7 +132,7 @@ results_tpcf_major = []
 for l in range(len(bs)):
     for i in range(len(csize)):
         print(l,i)
-        exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs, hv=hv)
+        exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=100, csize=csize[i], h=hs, hv=hv)
         e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
         print('specs, alphas', len(e3_a_1[1]))
         cond_spec = e3_a_1[0] == 0
