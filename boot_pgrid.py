@@ -210,7 +210,9 @@ results_r_3 = np.load('mcmc_3.npy')
 
 results_r_3.shape'''
 
-def boot_sample():
+def boot_sample(params):
+    model_D_R_vir = params[0]
+    model_Wr = params[1]
     no_upper_sample = random.normal(loc=W_r_churchill_no_upper, scale=e_Wr_no_upper, size=None)
     upper_sample = random.uniform(low=0.0, high=W_r_churchill_upper, size=None)
     all_sample = np.concatenate((no_upper_sample, upper_sample))
@@ -261,9 +263,13 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                 model_R_vir = modelgrid[2][i][j]
                 model_D_R_vir= model_D/model_R_vir
                 ks = []
+                params_par = [model_D_R_vir,model_Wr]
                         
                 with concurrent.futures.ProcessPoolExecutor() as executor:
-                    results = list(executor.map(boot_sample))
+                    results = [executor.submit(boot_sample, params_par) for _ in range(boot)]
+                    
+                    for r in concurrent.futures.as_completed(results):
+                        ks.append(r.result)
                         
                 ''' for m in range(boot):
                             print('b', m)
@@ -273,7 +279,7 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                             p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
                             ks.append(p)'''
                             
-                p_med = np.mean(results)
+                p_med = np.mean(ks)
                 pgrid[i][j] = p_med
         return(pgrid)
                        
