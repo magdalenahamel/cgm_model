@@ -180,7 +180,7 @@ hs = 5 #bajar un poco para que no sea un  1,10,20
 hv = 10 #bajar maximo a 100
 
 params = [bs,csize]
-results_r_2 = np.load('mcmc_10.npy')
+results_r_2 = np.load('mp_mcmc_10.npy')
 
 '''
 bs_2 = np.linspace(0.1,5,7) 
