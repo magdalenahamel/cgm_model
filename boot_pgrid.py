@@ -271,7 +271,7 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                     for r in concurrent.futures.as_completed(results):
                         ks.append(r.result)
                         
-                ''' for m in range(boot):
+                    ''' for m in range(boot):
                             print('b', m)
                             no_upper_sample = random.normal(loc=W_r_churchill_no_upper, scale=e_Wr_no_upper, size=None)
                             upper_sample = random.uniform(low=0.0, high=W_r_churchill_upper, size=None)
@@ -279,8 +279,8 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                             p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
                             ks.append(p)'''
                             
-                p_med = np.mean(ks)
-                pgrid[i][j] = p_med
+                    p_med = np.mean(ks)
+                    pgrid[i][j] = p_med
         return(pgrid)
                        
 prob_2_boot = getpgrid_boot_2(results_r_2)
