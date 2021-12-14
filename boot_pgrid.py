@@ -8,6 +8,10 @@ from scipy.spatial.distance import pdist, cdist
 from scipy.stats import kstwobign, pearsonr
 from scipy.stats import genextreme
 
+import concurrent.futures
+import itertools
+import functools
+
 __all__ = ['ks2d2s', 'estat', 'estat2d']
 
 churchill_iso = pd.read_csv('Churchill_iso_full.txt', error_bad_lines=False, delim_whitespace=True)
@@ -26,6 +30,7 @@ e_Wr_no_upper = e_Wr[~con_upper]
 
 all_d = np.concatenate((D_R_vir_churchill_no_upper, D_R_vir_churchill_upper))
 
+### 2D KS test ###
 
 def ks2d2s(x1, y1, x2, y2, nboot=None, extra=False):
     '''Two-dimensional Kolmogorov-Smirnov test on two samples. 
@@ -167,7 +172,17 @@ def energy(x, y, method='log'):
     # z = ((n*m)/(n+m)) * z # ref. SR
     return z
 
+### bootstrap ###
 
+bs = np.linspace(0.1,4,10) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+csize = np.linspace(0.01,2,10) #poner en escala mas separada
+hs = 5 #bajar un poco para que no sea un  1,10,20
+hv = 10 #bajar maximo a 100
+
+params = [bs,csize]
+results_r_2 = np.load('mcmc_10.npy')
+
+'''
 bs_2 = np.linspace(0.1,5,7) 
 csize_2 = np.linspace(0.01,2,7) 
 hs_2 = np.linspace(5,40,7) 
@@ -177,7 +192,7 @@ params_2 = [bs_2,csize_2,hs_2,hv_2]
 
 params_name_2 = ['f_v', 'cloud size', 'disc height', 'velocity scale height']
 
-results_r_2 = np.load('mcmc_2.npy')
+results_r_2 = np.load('mcmc_10.npy')'''
 
 
 
@@ -195,6 +210,13 @@ results_r_3 = np.load('mcmc_3.npy')
 
 results_r_3.shape'''
 
+def boot_sample():
+    no_upper_sample = random.normal(loc=W_r_churchill_no_upper, scale=e_Wr_no_upper, size=None)
+    upper_sample = random.uniform(low=0.0, high=W_r_churchill_upper, size=None)
+    all_sample = np.concatenate((no_upper_sample, upper_sample))
+    p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
+    return(p)
+
 def getpgrid_boot(modelgrid, boot = 1000):
         #Determine the grid in terms of deviation from sigma
         pgrid=np.zeros((7,7,7,7)) + 1.0
@@ -209,19 +231,52 @@ def getpgrid_boot(modelgrid, boot = 1000):
                         model_R_vir = modelgrid[2][i][j][k][l]
                         model_D_R_vir= model_D/model_R_vir
                         ks = []
-                        for m in range(boot):
+                        
+                        with concurrent.futures.ProcessPoolExecutor() as executor:
+                            results = list(executor.submit(boot_sample))
+                        
+                        ''' for m in range(boot):
                             print('b', m)
                             no_upper_sample = random.normal(loc=W_r_churchill_no_upper, scale=e_Wr_no_upper, size=None)
                             upper_sample = random.uniform(low=0.0, high=W_r_churchill_upper, size=None)
                             all_sample = np.concatenate((no_upper_sample, upper_sample))
                             p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
-                            ks.append(p)
+                            ks.append(p)'''
                             
-                        p_med = np.mean(ks)
+                        p_med = np.mean(results)
                         pgrid[i][j][k][l] = p_med
                         
     
         return pgrid
-prob_2_boot = getpgrid_boot(results_r_2)
     
-np.save('pgrid_boot_2', prob_2_boot)
+def getpgrid_boot_2(modelgrid, boot = 1000):
+        #Determine the grid in terms of deviation from sigma
+        pgrid=np.zeros((10,10) + 1.0
+         #Loop through each constraint
+        for i in range(10):
+            for j in range(10):
+                print(i,j)
+                model_Wr = modelgrid[0][i][j]
+                model_D = modelgrid[1][i][j]
+                model_R_vir = modelgrid[2][i][j]
+                model_D_R_vir= model_D/model_R_vir
+                ks = []
+                        
+                with concurrent.futures.ProcessPoolExecutor() as executor:
+                    results = list(executor.submit(boot_sample))
+                        
+                ''' for m in range(boot):
+                            print('b', m)
+                            no_upper_sample = random.normal(loc=W_r_churchill_no_upper, scale=e_Wr_no_upper, size=None)
+                            upper_sample = random.uniform(low=0.0, high=W_r_churchill_upper, size=None)
+                            all_sample = np.concatenate((no_upper_sample, upper_sample))
+                            p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
+                            ks.append(p)'''
+                            
+                p_med = np.mean(results)
+                pgrid[i][j] = p_med
+        return(pgrid)
+                       
+prob_2_boot = getpgrid_boot_2(results_r_2)
+    
+np.save('pgrid_boot_10', prob_2_boot)
