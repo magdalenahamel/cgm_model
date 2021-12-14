@@ -39,6 +39,8 @@ from itertools import combinations
 
 def TPCF(speci_empty_t, pos_alpha):
     #cond = np.asarray(nr_clouds) == 0
+    if len(speci_empty_t) == 0:
+        return(np.zero(len(major_vel)))
     gauss_specs = []
     abs_specs = []
     vels_abs = []
