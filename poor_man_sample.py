@@ -64,7 +64,7 @@ def TPCF(speci_empty_t, pos_alpha):
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
     print('start tpcf')
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        result = list(executor.map(absdif, combinations(abs_specs_f, 2)))
+        result = list(executor.imap(absdif, combinations(abs_specs_f, 2)))
     print('finish tpcf')
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
     if pos_alpha == 'minor':
