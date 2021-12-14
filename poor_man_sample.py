@@ -37,10 +37,18 @@ major_error = np.abs(major_tpcf['minus_error'].to_numpy() - major_tpcf['plus_err
 
 from itertools import combinations
 
-def TPCF(speci_empty_t, pos_alpha):
+def TPCF(params):
+    speci_empty_t = params[0]
+    pos_alpha = params[1]
+    print('TPCF', pos_alpha)
     #cond = np.asarray(nr_clouds) == 0
     #if len(speci_empty_t) == 0:
         #return(np.zero(len(major_vel)))
+        
+    if len(speci_empty_t)==0 & pos_alpha =='minor':
+            return(np.zeros(minor_vel))
+    elif len(speci_empty_t)==0 & pos_alpha =='major':
+            return(np.zeros(major_vel))
     gauss_specs = []
     abs_specs = []
     vels_abs = []
@@ -48,7 +56,7 @@ def TPCF(speci_empty_t, pos_alpha):
     print('how many specs', len(speci_empty_t))
     
     for m in range(len(speci_empty_t)):
-        #print(m)
+        
         gauss_specj = filtrogauss(45000,0.03,2796.35,speci_empty_t[m])
         gauss_specs.append(gauss_specj)
         zabs=0.77086
@@ -57,10 +65,8 @@ def TPCF(speci_empty_t, pos_alpha):
         cond_abs2 = np.abs(vels_wave) < 800
         abs_gauss_spec_major = vels_wave[cond_abs1 & cond_abs2]
         abs_specs.append(abs_gauss_spec_major)
-    #vels_abs_major_i = [abs(i-j) for i in abs_gauss_spec_major for j in abs_gauss_spec_major if i != j]
-    #vels_abs.append(vels_abs_major_i)
 
-# Convert input list to a numpy array
+    # Convert input list to a numpy array
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
     print('start tpcf')
     comb = combinations(abs_specs_f, 2)
@@ -74,16 +80,16 @@ def TPCF(speci_empty_t, pos_alpha):
            bla2 = np.histogram(result,bins=major_vel)
         bla_t = bla2[0]/len(result)
         return(bla_t)'''
-    results = [absdif(co) for co in comb]
+    results = [absdif(co, pos_alpha) for co in comb]
     if pos_alpha == 'minor':
-       bla2 = np.histogram(result,bins=minor_vel)
+       bla2 = np.histogram(results,bins=minor_vel)
     elif pos_alpha == 'major':
-       bla2 = np.histogram(result,bins=major_vel)
-    bla_t = bla2[0]/len(result)
+       bla2 = np.histogram(results,bins=major_vel)
+    bla_t = bla2[0]/len(results)
     return(bla_t)
 
-def absdif(bla):
-    print('absdif',bla)
+def absdif(bla, bla2):
+    print('absdif',bla, bla2)
     a = bla[0]
     b = bla[1]
     return(abs(a -b))
@@ -152,9 +158,19 @@ for l in range(len(bs)):
         
         spec_minor = spec_abs[cond_minor]
         spec_major = spec_abs[cond_major]
-        print('empieza TPCF minor', l,i)
-        print('minor specs', spec_minor)
-        if len(spec_minor) == 0:
+        specs_tot = [(spec_minor,'minor'), (spec_major, 'major')]
+        print('empieza TPCF', l,i)
+        
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            results = executor.map(TPCF, specs_tot)
+            list_res = list(results)
+            
+            results_tpcf_minor.append(list_res[0])
+            results_tpcf_major.append(list_res[1])
+            
+            
+        
+        '''if len(spec_minor) == 0:
             tpcf_minor = np.zeros(minor_vel)
         else:
             tpcf_minor = TPCF(spec_minor, 'minor')
@@ -163,14 +179,14 @@ for l in range(len(bs)):
             tpcf_major = np.zeros(major_vel)
         else:
             tpcf_major = TPCF(spec_major, 'major')
-        print('termina TPCF', l,i)
+        print('termina TPCF', l,i)'''
         results_Wr.append(e3_a_1[8])
         results_D.append(e3_a_1[3])
         results_R_vir.append(e3_a_1[7])
         #results_specs.append(e3_a_1[1])
         #results_nr_clouds.append(e3_a_1[0])
-        results_tpcf_minor.append(tpcf_minor)
-        results_tpcf_major.append(tpcf_major)
+        #results_tpcf_minor.append(tpcf_minor)
+        #results_tpcf_major.append(tpcf_major)
 
 '''for l in range(len(bs)):
     for i in range(len(csize)):
