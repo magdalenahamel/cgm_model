@@ -39,8 +39,8 @@ from itertools import combinations
 
 def TPCF(speci_empty_t, pos_alpha):
     #cond = np.asarray(nr_clouds) == 0
-    if len(speci_empty_t) == 0:
-        return(np.zero(len(major_vel)))
+    #if len(speci_empty_t) == 0:
+        #return(np.zero(len(major_vel)))
     gauss_specs = []
     abs_specs = []
     vels_abs = []
@@ -141,9 +141,15 @@ for l in range(len(bs)):
         spec_minor = spec_abs[cond_minor]
         spec_major = spec_abs[cond_major]
         print('empieza TPCF minor', l,i)
-        tpcf_minor = TPCF(spec_minor, 'minor')
+        if len(spec_minor) == 0:
+            tpcf_minor = np.zeros(minor_vel)
+        else:
+            tpcf_minor = TPCF(spec_minor, 'minor')
         print('empieza TPCF major', l,i)
-        tpcf_major = TPCF(spec_major, 'major')
+        if len(spec_major) == 0:
+            tpcf_major = np.zeros(major_vel)
+        else:
+            tpcf_major = TPCF(spec_major, 'major')
         print('termina TPCF', l,i)
         results_Wr.append(e3_a_1[8])
         results_D.append(e3_a_1[3])
