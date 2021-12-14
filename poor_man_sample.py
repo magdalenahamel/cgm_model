@@ -15,6 +15,15 @@ from astropy import constants as const
 
 
 ### TPCF ###
+from astropy.convolution import convolve, Gaussian1DKernel
+
+def filtrogauss(R, spec_res, lam_0, flux):
+    del_lam = lam_0/R
+    del_lam_pix = del_lam/spec_res
+    gauss_kernel = (Gaussian1DKernel(del_lam_pix))
+    gausflux = convolve(flux, gauss_kernel)
+    return(gausflux)
+
 minor_tpcf = pd.read_csv('2minor.txt', delimiter='     ', engine='python')
 major_tpcf = pd.read_csv('2major.txt', delimiter='     ', engine='python')
 
