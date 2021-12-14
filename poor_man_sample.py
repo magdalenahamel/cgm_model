@@ -134,10 +134,14 @@ for l in range(len(bs)):
         print(l,i)
         exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs, hv=hv)
         e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
-        cond_minor = e3_a_1[1] < 45
-        cond_major = e3_a_1[1] > 45
+        print('specs, alphas', len(e3_a_1[1]))
         cond_spec = e3_a_1[0] == 0
         spec_abs = e3_a_1[1][~cond_spec]
+        alphas_abs = e3_a_1[2][~cond_spec]
+        cond_minor = alphas_abs < 45
+        cond_major = alphas_abs > 45
+        
+        
         spec_minor = spec_abs[cond_minor]
         spec_major = spec_abs[cond_major]
         print('empieza TPCF minor', l,i)
