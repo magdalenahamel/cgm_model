@@ -63,16 +63,17 @@ def TPCF(speci_empty_t, pos_alpha):
 # Convert input list to a numpy array
     abs_specs_f = np.concatenate(np.asarray(abs_specs))
     print('start tpcf')
+    comb = combinations(abs_specs_f, 2)
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        result = list(executor.imap(absdif, combinations(abs_specs_f, 2)))
+        result = [executor.submit(absdif, co) for co in comb]
     print('finish tpcf')
    # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
-    if pos_alpha == 'minor':
-        bla2 = np.histogram(result,bins=minor_vel)
-    elif pos_alpha == 'major':
-        bla2 = np.histogram(result,bins=major_vel)
-    bla_t = bla2[0]/len(result)
-    return(bla_t)
+        if pos_alpha == 'minor':
+           bla2 = np.histogram(result,bins=minor_vel)
+        elif pos_alpha == 'major':
+           bla2 = np.histogram(result,bins=major_vel)
+        bla_t = bla2[0]/len(result)
+        return(bla_t)
 
 def absdif(bla):
     print('absdif',bla)
