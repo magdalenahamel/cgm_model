@@ -269,7 +269,7 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                     results = [executor.submit(boot_sample, params_par) for _ in range(boot)]
                     
                     for r in concurrent.futures.as_completed(results):
-                        ks.append(r.result)
+                        ks.append(r.result())
                         
                     ''' for m in range(boot):
                             print('b', m)
