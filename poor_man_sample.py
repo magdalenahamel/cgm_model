@@ -66,8 +66,8 @@ def TPCF(speci_empty_t, pos_alpha):
     comb = combinations(abs_specs_f, 2)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         result = [executor.submit(absdif, co) for co in comb]
-    print('finish tpcf')
-   # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
+        print('finish tpcf')
+        # bla = [abs(a -b) for a, b in combinations(abs_specs_f, 2)]
         if pos_alpha == 'minor':
            bla2 = np.histogram(result,bins=minor_vel)
         elif pos_alpha == 'major':
