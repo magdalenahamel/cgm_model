@@ -263,7 +263,7 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                 ks = []
                         
                 with concurrent.futures.ProcessPoolExecutor() as executor:
-                    results = list(executor.submit(boot_sample))
+                    results = list(executor.map(boot_sample))
                         
                 ''' for m in range(boot):
                             print('b', m)
