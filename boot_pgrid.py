@@ -251,7 +251,7 @@ def getpgrid_boot(modelgrid, boot = 1000):
     
 def getpgrid_boot_2(modelgrid, boot = 1000):
         #Determine the grid in terms of deviation from sigma
-        pgrid=np.zeros((10,10) + 1.0)
+        pgrid=np.zeros((10,10)) + 1.0
         #Loop through each constraint
         for i in range(10):
             for j in range(10):
