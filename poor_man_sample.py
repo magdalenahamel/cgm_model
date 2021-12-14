@@ -141,6 +141,7 @@ for l in range(len(bs)):
         spec_minor = spec_abs[cond_minor]
         spec_major = spec_abs[cond_major]
         print('empieza TPCF minor', l,i)
+        print('minor specs', spec_minor)
         if len(spec_minor) == 0:
             tpcf_minor = np.zeros(minor_vel)
         else:
