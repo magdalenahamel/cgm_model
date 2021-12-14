@@ -135,7 +135,7 @@ for l in range(len(bs)):
         exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=100, csize=csize[i], h=hs, hv=hv)
         e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
         print('specs, alphas', len(e3_a_1[1]))
-        cond_spec = e3_a_1[0] == 0
+        '''cond_spec = e3_a_1[0] == 0
         spec_abs = e3_a_1[1][~cond_spec]
         alphas_abs = e3_a_1[2][~cond_spec]
         cond_minor = alphas_abs < 45
@@ -155,14 +155,14 @@ for l in range(len(bs)):
             tpcf_major = np.zeros(major_vel)
         else:
             tpcf_major = TPCF(spec_major, 'major')
-        print('termina TPCF', l,i)
+        print('termina TPCF', l,i)'''
         results_Wr.append(e3_a_1[8])
         results_D.append(e3_a_1[3])
         results_R_vir.append(e3_a_1[7])
         #results_specs.append(e3_a_1[1])
         #results_nr_clouds.append(e3_a_1[0])
-        results_tpcf_minor.append(tpcf_minor)
-        results_tpcf_major.append(tpcf_major)
+        #results_tpcf_minor.append(tpcf_minor)
+        #results_tpcf_major.append(tpcf_major)
 
 '''for l in range(len(bs)):
     for i in range(len(csize)):
@@ -179,8 +179,8 @@ results_Wr_r = np.reshape(results_Wr, (10,10,300))
 results_D_r = np.reshape(results_D, (10,10,300))
 results_R_vir_r = np.reshape(results_R_vir, (10,10,300))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
-results_tpcf_minor_r = np.reshape(results_tpcf_minor,(10,10,len(minor_vel)))
-results_tpcf_major_r = np.reshape(results_tpcf_major,(10,10,len(major_vel)))
+#results_tpcf_minor_r = np.reshape(results_tpcf_minor,(10,10,len(minor_vel)))
+#results_tpcf_major_r = np.reshape(results_tpcf_major,(10,10,len(major_vel)))
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
 
@@ -228,5 +228,5 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 
 np.save('mp_mcmc_10', results_r)
-np.save('mp_mcmc_10_tpcf_minor',results_tpcf_minor_r)
-np.save('mp_mcmc_10_tpcf_major',results_tpcf_major_r)
+#np.save('mp_mcmc_10_tpcf_minor',results_tpcf_minor_r)
+#p.save('mp_mcmc_10_tpcf_major',results_tpcf_major_r)
