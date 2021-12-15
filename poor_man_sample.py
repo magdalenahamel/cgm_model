@@ -283,4 +283,4 @@ results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 np.save('mp_mcmc_12', results_r)
 np.save('mp_mcmc_12_tpcf_minor',results_tpcf_minor_r)
-p.save('mp_mcmc_12_tpcf_major',results_tpcf_major_r)
+np.save('mp_mcmc_12_tpcf_major',results_tpcf_major_r)
