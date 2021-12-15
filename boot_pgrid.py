@@ -174,16 +174,27 @@ def energy(x, y, method='log'):
 
 ### bootstrap ###
 
-bs = np.linspace(0.1,4,10) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+'''bs = np.linspace(0.1,4,10) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
 csize = np.linspace(0.01,2,10) #poner en escala mas separada
 hs = 5 #bajar un poco para que no sea un  1,10,20
 hv = 10 #bajar maximo a 100
 
 params = [bs,csize]
-results_r_2 = np.load('mp_mcmc_10.npy')
+results_r_2 = np.load('mp_mcmc_10.npy')'''
 
-'''
-bs_2 = np.linspace(0.1,5,7) 
+
+bs_12 = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+csize_12 = np.linspace(0.01,1,7) #poner en escala mas separada
+hs_12 = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
+hv_12 = np.linspace(0, 20,7) #bajar maximo a 100
+
+params_12 = [bs_12,csize_12,hs_12,hv_12]
+
+params_name_12 = ['f_v', 'cloud size', 'disc height', 'velocity scale height']
+
+results_r_12 = np.load('mp_mcmc_12.npy')
+
+'''bs_2 = np.linspace(0.1,5,7) 
 csize_2 = np.linspace(0.01,2,7) 
 hs_2 = np.linspace(5,40,7) 
 hv_2 = np.linspace(0, 50,7) 
@@ -283,6 +294,6 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                     pgrid[i][j] = p_med
         return(pgrid)
                        
-prob_2_boot = getpgrid_boot_2(results_r_2)
+prob_2_boot = getpgrid_boot_2(results_r_12)
     
-np.save('pgrid_boot_10', prob_2_boot)
+np.save('pgrid_boot_12', prob_2_boot)
