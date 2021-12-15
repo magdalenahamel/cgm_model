@@ -109,10 +109,10 @@ def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
 
 #### define grids for the poor mans mcmc
 
-'''bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+bs = np.linspace(0.1,4,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
 csize = np.linspace(0.01,1,7) #poner en escala mas separada
 hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
-hv = np.linspace(0, 20,7) #bajar maximo a 100'''
+hv = np.linspace(0, 20,7) #bajar maximo a 100
 
 '''bs = np.linspace(0.1,4,2) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
 csize = np.linspace(1,10,2) #poner en escala mas separada
@@ -120,10 +120,10 @@ hs = np.linspace(10,20,2) #bajar un poco para que no sea un  1,10,20
 hv = np.linspace(0, 20,2) #bajar maximo a 100
 params = [bs,csize,hs,hv]'''
 
-bs = np.linspace(0.1,4,10) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+'''bs = np.linspace(0.1,4,10) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
 csize = np.linspace(0.01,2,10) #poner en escala mas separada
 hs = 5 #bajar un poco para que no sea un  1,10,20
-hv = 10 #bajar maximo a 100
+hv = 10 #bajar maximo a 100'''
 
 params = [bs,csize]
 
@@ -148,7 +148,7 @@ results_specs = []
 results_tpcf_minor = []
 results_tpcf_major = []
 
-for l in range(len(bs)):
+'''for l in range(len(bs)):
     for i in range(len(csize)):
         print(l,i)
         exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=50, csize=csize[i], h=hs, hv=hv)
@@ -174,17 +174,6 @@ for l in range(len(bs)):
             results_tpcf_major.append(list_res[1])
             
             
-        
-        '''if len(spec_minor) == 0:
-            tpcf_minor = np.zeros(minor_vel)
-        else:
-            tpcf_minor = TPCF(spec_minor, 'minor')
-        print('empieza TPCF major', l,i)
-        if len(spec_major) == 0:
-            tpcf_major = np.zeros(major_vel)
-        else:
-            tpcf_major = TPCF(spec_major, 'major')
-        print('termina TPCF', l,i)'''
         results_Wr.append(e3_a_1[8])
         results_D.append(e3_a_1[3])
         results_R_vir.append(e3_a_1[7])
@@ -192,24 +181,60 @@ for l in range(len(bs)):
         #results_nr_clouds.append(e3_a_1[0])
         #results_tpcf_minor.append(tpcf_minor)
         #results_tpcf_major.append(tpcf_major)
-
-'''for l in range(len(bs)):
-    for i in range(len(csize)):
-        print(l,i)
-        exp_fill_fac = sample.Sample(prob_hit_log_lin,200,sample_size=300, csize=csize[i], h=hs, hv=hv)
-        e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
-        results_Wr.append(e3_a_1[8])
-        results_D.append(e3_a_1[3])
-        results_R_vir.append(e3_a_1[7])
-        results_specs.append(e3_a_1[1])'''
-                
-                
+        
 results_Wr_r = np.reshape(results_Wr, (10,10,50))
 results_D_r = np.reshape(results_D, (10,10,50))
 results_R_vir_r = np.reshape(results_R_vir, (10,10,50))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 results_tpcf_minor_r = np.reshape(results_tpcf_minor,(10,10,len(minor_vel)))
 results_tpcf_major_r = np.reshape(results_tpcf_major,(10,10,len(major_vel)))
+#specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
+'''
+
+
+
+for l in range(len(bs)):
+    for i in range(len(csize)):
+        for j in range(len(hs)):
+            for k in range(len(hv)):
+                print(l,i)
+                exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=50, csize=csize[i], h=hs[j], hv=hv[k])
+                e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
+                print('specs, alphas', len(e3_a_1[1]))
+                cond_spec = e3_a_1[0] == 0
+                spec_abs = e3_a_1[1][~cond_spec]
+                alphas_abs = e3_a_1[2][~cond_spec]
+                cond_minor = alphas_abs < 45
+                cond_major = alphas_abs > 45
+        
+        
+                spec_minor = spec_abs[cond_minor]
+                spec_major = spec_abs[cond_major]
+                specs_tot = [(spec_minor,'minor'), (spec_major, 'major')]
+                print('empieza TPCF', l,i)
+        
+                with concurrent.futures.ProcessPoolExecutor() as executor:
+                    results = executor.map(TPCF, specs_tot)
+                    list_res = list(results)
+            
+                    results_tpcf_minor.append(list_res[0])
+                    results_tpcf_major.append(list_res[1])
+            
+            
+        
+       
+                results_Wr.append(e3_a_1[8])
+                results_D.append(e3_a_1[3])
+                results_R_vir.append(e3_a_1[7])
+        
+                
+                
+results_Wr_r = np.reshape(results_Wr, (7,7,7,7,50))
+results_D_r = np.reshape(results_D, (7,7,7,7,50))
+results_R_vir_r = np.reshape(results_R_vir, (7,7,7,7,50))
+results_r = [results_Wr_r, results_D_r, results_R_vir_r]
+results_tpcf_minor_r = np.reshape(results_tpcf_minor,(7,7,7,7,len(minor_vel)))
+results_tpcf_major_r = np.reshape(results_tpcf_major,(7,7,7,7,len(major_vel)))
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
 
@@ -256,6 +281,6 @@ specs_r = np.reshape(specs_results, (7,7,7,7,300,len(wave)))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 
-np.save('mp_mcmc_11', results_r)
-np.save('mp_mcmc_11_tpcf_minor',results_tpcf_minor_r)
-p.save('mp_mcmc_11_tpcf_major',results_tpcf_major_r)
+np.save('mp_mcmc_12', results_r)
+np.save('mp_mcmc_12_tpcf_minor',results_tpcf_minor_r)
+p.save('mp_mcmc_12_tpcf_major',results_tpcf_major_r)
