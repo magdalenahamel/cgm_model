@@ -245,8 +245,18 @@ def getpgrid_boot(modelgrid, boot = 1000):
                         model_D_R_vir= model_D/model_R_vir
                         ks = []
                         
+                        params_par = [model_D_R_vir,model_Wr]
+                        
                         with concurrent.futures.ProcessPoolExecutor() as executor:
-                            results = list(executor.submit(boot_sample))
+                            results = [executor.submit(boot_sample, params_par) for _ in range(boot)]
+                    
+                            for r in concurrent.futures.as_completed(results):
+                                ks.append(r.result())
+                            
+                            p_med = np.mean(ks)
+                            pgrid[i][j][k][l] = p_med
+                        
+                        
                         
                         ''' for m in range(boot):
                             print('b', m)
@@ -256,8 +266,7 @@ def getpgrid_boot(modelgrid, boot = 1000):
                             p = ks2d2s(all_d,all_sample,model_D_R_vir, model_Wr)
                             ks.append(p)'''
                             
-                        p_med = np.mean(results)
-                        pgrid[i][j][k][l] = p_med
+                        
                         
     
         return pgrid
@@ -294,6 +303,6 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                     pgrid[i][j] = p_med
         return(pgrid)
                        
-prob_2_boot = getpgrid_boot_2(results_r_12)
+prob_2_boot = getpgrid_boot(results_r_12)
     
 np.save('pgrid_boot_12', prob_2_boot)
