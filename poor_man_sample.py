@@ -29,13 +29,13 @@ major_tpcf = pd.read_csv('2major.txt', delimiter='     ', engine='python')
 
 minor_vel = minor_tpcf['vel'].to_numpy()
 minor_bins = minor_vel - 5
-np.append(minor_bins, minor_bins[-1] +10)
+minor_bins = np.append(minor_bins, minor_bins[-1] +10)
 minor_tpcf_val = minor_tpcf['TPCF'].to_numpy()
 minor_error = np.abs(minor_tpcf['minus_error'].to_numpy() - minor_tpcf['plus_error'].to_numpy())
       
 major_vel = major_tpcf['vel'].to_numpy()
 major_bins = major_vel - 5
-np.append(major_bins, major_bins[-1] +10)
+major_bins = np.append(major_bins, major_bins[-1] +10)
 major_tpcf_val = major_tpcf['TPCF'].to_numpy()
 major_error = np.abs(major_tpcf['minus_error'].to_numpy() - major_tpcf['plus_error'].to_numpy())
 
