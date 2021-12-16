@@ -281,6 +281,6 @@ specs_r = np.reshape(specs_results, (7,7,7,7,300,len(wave)))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]'''
 
 
-np.save('mp_mcmc_12', results_r)
-np.save('mp_mcmc_12_tpcf_minor',results_tpcf_minor_r)
-np.save('mp_mcmc_12_tpcf_major',results_tpcf_major_r)
+np.save('mp_mcmc_13', results_r)
+np.save('mp_mcmc_13_tpcf_minor',results_tpcf_minor_r)
+np.save('mp_mcmc_13_tpcf_major',results_tpcf_major_r)
