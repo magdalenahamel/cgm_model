@@ -192,7 +192,7 @@ params_12 = [bs_12,csize_12,hs_12,hv_12]
 
 params_name_12 = ['f_v', 'cloud size', 'disc height', 'velocity scale height']
 
-results_r_12 = np.load('mp_mcmc_12.npy')
+results_r_12 = np.load('mp_mcmc_13.npy')
 
 '''bs_2 = np.linspace(0.1,5,7) 
 csize_2 = np.linspace(0.01,2,7) 
@@ -305,4 +305,4 @@ def getpgrid_boot_2(modelgrid, boot = 1000):
                        
 prob_2_boot = getpgrid_boot(results_r_12)
     
-np.save('pgrid_boot_12', prob_2_boot)
+np.save('pgrid_boot_13', prob_2_boot)
