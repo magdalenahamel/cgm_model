@@ -61,9 +61,9 @@ def TPCF(params):
         #return(np.zero(len(major_vel)))
         
     if len(speci_empty_t)==0 and pos_alpha =='minor':
-            return(np.zeros(minor_vel))
+            return(np.zeros(len(minor_vel)))
     elif len(speci_empty_t)==0 and pos_alpha =='major':
-            return(np.zeros(major_vel))
+            return(np.zeros(len(major_vel)))
     gauss_specs = []
     abs_specs = []
     vels_abs = []
