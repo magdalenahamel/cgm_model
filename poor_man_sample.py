@@ -1,3 +1,14 @@
+from __future__ import division
+
+
+from numpy import random
+from scipy.spatial.distance import pdist, cdist
+from scipy.stats import kstwobign, pearsonr
+from scipy.stats import genextreme
+
+import concurrent.futures
+import functools
+
 from tqdm.notebook import tqdm, trange
 import time
 import numpy as np
@@ -12,7 +23,7 @@ import concurrent.futures
 import itertools
 
 from astropy import constants as const
-
+from astropy.convolution import convolve, Gaussian1DKernel
 
 ### TPCF ###
 
@@ -189,18 +200,6 @@ np.save('mp_mcmc_14_tpcf_minor',results_tpcf_minor_r)
 np.save('mp_mcmc_14_tpcf_major',results_tpcf_major_r)
 
 #### hacer la parte de bootstrap####
-from astropy.convolution import convolve, Gaussian1DKernel
-
-from __future__ import division
-
-
-from numpy import random
-from scipy.spatial.distance import pdist, cdist
-from scipy.stats import kstwobign, pearsonr
-from scipy.stats import genextreme
-
-import concurrent.futures
-import functools
 
 __all__ = ['ks2d2s', 'estat', 'estat2d']
 
