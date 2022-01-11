@@ -121,7 +121,7 @@ def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
 #### define grids for the poor mans mcmc
 
 bs = np.linspace(0.1,10,7) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = np.linspace(0.01,20,7) #poner en escala mas separada
+csize = np.linspace(0.01,1,7) #poner en escala mas separada
 hs = np.linspace(1,20,7) #bajar un poco para que no sea un  1,10,20
 hv = np.linspace(0, 20,7) #bajar maximo a 100
 
@@ -195,9 +195,9 @@ results_tpcf_minor_r = np.reshape(results_tpcf_minor,(7,7,7,7,len(minor_vel)))
 results_tpcf_major_r = np.reshape(results_tpcf_major,(7,7,7,7,len(major_vel)))
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
-np.save('mp_mcmc_14', results_r)
-np.save('mp_mcmc_14_tpcf_minor',results_tpcf_minor_r)
-np.save('mp_mcmc_14_tpcf_major',results_tpcf_major_r)
+np.save('mp_mcmc_15', results_r)
+np.save('mp_mcmc_15_tpcf_minor',results_tpcf_minor_r)
+np.save('mp_mcmc_15_tpcf_major',results_tpcf_major_r)
 
 #### hacer la parte de bootstrap####
 
@@ -404,4 +404,4 @@ def getpgrid_boot(modelgrid, boot = 1000):
         return(pgrid)
     
 prob_2_boot = getpgrid_boot(results_r)
-np.save('pgrid_boot_14', prob_2_boot)
+np.save('pgrid_boot_15', prob_2_boot)
