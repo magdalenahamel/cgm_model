@@ -25,6 +25,12 @@ import itertools
 from astropy import constants as const
 from astropy.convolution import convolve, Gaussian1DKernel
 
+import time
+
+start = time.process_time()
+# your code here    
+
+
 ### TPCF ###
 
 
@@ -156,7 +162,7 @@ for l in range(len(bs)):
         for j in range(len(hs)):
             for k in range(len(hv)):
                 print(l,i)
-                exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=50, csize=csize[i], h=hs[j], hv=hv[k])
+                exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=100, csize=csize[i], h=hs[j], hv=hv[k])
                 e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
                 print('specs, alphas', len(e3_a_1[1]))
                 cond_spec = e3_a_1[0] == 0
@@ -195,9 +201,9 @@ results_tpcf_minor_r = np.reshape(results_tpcf_minor,(7,7,7,7,len(minor_vel)))
 results_tpcf_major_r = np.reshape(results_tpcf_major,(7,7,7,7,len(major_vel)))
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
-np.save('mp_mcmc_15', results_r)
-np.save('mp_mcmc_15_tpcf_minor',results_tpcf_minor_r)
-np.save('mp_mcmc_15_tpcf_major',results_tpcf_major_r)
+np.save('mp_mcmc_15_a', results_r)
+np.save('mp_mcmc_15_tpcf_minor_a',results_tpcf_minor_r)
+np.save('mp_mcmc_15_tpcf_major_a',results_tpcf_major_r)
 
 #### hacer la parte de bootstrap####
 
@@ -404,4 +410,6 @@ def getpgrid_boot(modelgrid, boot = 1000):
         return(pgrid)
     
 prob_2_boot = getpgrid_boot(results_r)
-np.save('pgrid_boot_15', prob_2_boot)
+np.save('pgrid_boot_15_a', prob_2_boot)
+
+print(time.process_time() - start)
