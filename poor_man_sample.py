@@ -193,9 +193,9 @@ for l in range(len(bs)):
         
                 
                 
-results_Wr_r = np.reshape(results_Wr, (7,7,7,7,50))
-results_D_r = np.reshape(results_D, (7,7,7,7,50))
-results_R_vir_r = np.reshape(results_R_vir, (7,7,7,7,50))
+results_Wr_r = np.reshape(results_Wr, (7,7,7,7,100))
+results_D_r = np.reshape(results_D, (7,7,7,7,100))
+results_R_vir_r = np.reshape(results_R_vir, (7,7,7,7,100))
 results_r = [results_Wr_r, results_D_r, results_R_vir_r]
 results_tpcf_minor_r = np.reshape(results_tpcf_minor,(7,7,7,7,len(minor_vel)))
 results_tpcf_major_r = np.reshape(results_tpcf_major,(7,7,7,7,len(major_vel)))
