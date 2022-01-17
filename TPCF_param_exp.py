@@ -219,8 +219,8 @@ np.save('TPCF_param_exp/V1/inclis', results_inclis)
 np.save('TPCF_param_exp/V1/R_vir', results_R_vir)
 np.save('TPCF_param_exp/V1/Wr', results_Wr)
 
-np.save('TPCF_param_exp/V1/tpcf_minor',results_tpcf_minor_r)
-np.save('TPCF_param_exp/V1/tpcf_major',results_tpcf_major_r)
+np.save('TPCF_param_exp/V1/tpcf_minor',results_tpcf_minor)
+np.save('TPCF_param_exp/V1/tpcf_major',results_tpcf_major)
 
 
 print(time.process_time() - start)
