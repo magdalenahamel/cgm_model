@@ -166,7 +166,7 @@ results_tpcf_major = []
 
 
 
-for l in range(len(csize)):
+for l in range(len(hs)):
     print(l)
     exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=200, csize=csize, h=hs[l], hv=hv)
     e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
