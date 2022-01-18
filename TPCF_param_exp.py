@@ -128,7 +128,7 @@ def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
 #### define grids for the parameter exploration
 
 bs = np.asarray([0.01, 5, 15]) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = 1 #poner en escala mas separada
+csize = 0.01 #poner en escala mas separada
 hs = 10 #bajar un poco para que no sea un  1,10,20
 hv = 10 #bajar maximo a 100
 
@@ -204,23 +204,23 @@ for l in range(len(bs)):
 
 
 
-dirName = 'TPCF_param_exp/V1'
+dirName = 'TPCF_param_exp/V2'
 
 os.makedirs(dirName)
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
-np.save('TPCF_param_exp/V1/nr_clouds', results_nr_clouds)
-np.save('TPCF_param_exp/V1/specs', results_specs)
-np.save('TPCF_param_exp/V1/alphas', results_alphas)
-np.save('TPCF_param_exp/V1/D', results_D)
-np.save('TPCF_param_exp/V1/vels', results_vels)
-np.save('TPCF_param_exp/V1/b', results_b)
-np.save('TPCF_param_exp/V1/inclis', results_inclis)
-np.save('TPCF_param_exp/V1/R_vir', results_R_vir)
-np.save('TPCF_param_exp/V1/Wr', results_Wr)
+np.save('TPCF_param_exp/V2/nr_clouds', results_nr_clouds)
+np.save('TPCF_param_exp/V2/specs', results_specs)
+np.save('TPCF_param_exp/V2/alphas', results_alphas)
+np.save('TPCF_param_exp/V2/D', results_D)
+np.save('TPCF_param_exp/V2/vels', results_vels)
+np.save('TPCF_param_exp/V2/b', results_b)
+np.save('TPCF_param_exp/V2/inclis', results_inclis)
+np.save('TPCF_param_exp/V2/R_vir', results_R_vir)
+np.save('TPCF_param_exp/V2/Wr', results_Wr)
 
-np.save('TPCF_param_exp/V1/tpcf_minor',results_tpcf_minor)
-np.save('TPCF_param_exp/V1/tpcf_major',results_tpcf_major)
+np.save('TPCF_param_exp/V2/tpcf_minor',results_tpcf_minor)
+np.save('TPCF_param_exp/V2/tpcf_major',results_tpcf_major)
 
 
 print(time.process_time() - start)
