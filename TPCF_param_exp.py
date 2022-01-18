@@ -127,8 +127,8 @@ def prob_hit_log_lin(r, r_vir, a, b, por_r_vir = 0.5):
 
 #### define grids for the parameter exploration
 
-bs = np.asarray([0.01, 5, 15]) # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
-csize = 0.01 #poner en escala mas separada
+bs =  5 # characteristic radius of the exponential function (it is accually a porcentage of Rvir) in log scale to make the range more homogeneous in lin scale
+csize = [0.01, 1, 10] #poner en escala mas separada
 hs = 10 #bajar un poco para que no sea un  1,10,20
 hv = 10 #bajar maximo a 100
 
@@ -166,10 +166,10 @@ results_tpcf_major = []
 
 
 
-for l in range(len(bs)):
+for l in range(len(csize)):
     print(l)
-    exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=200, csize=csize, h=hs, hv=hv)
-    e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs[l],0.2)
+    exp_fill_fac = Sample.Sample(prob_hit_log_lin,200,sample_size=200, csize=csize[l], h=hs, hv=hv)
+    e3_a_1 = exp_fill_fac.Nielsen_sample(np.log(100),bs,0.2)
     print('specs, alphas', len(e3_a_1[1]))
     cond_spec = e3_a_1[0] == 0
     spec_abs = e3_a_1[1][~cond_spec]
@@ -204,23 +204,23 @@ for l in range(len(bs)):
 
 
 
-dirName = 'TPCF_param_exp/V2'
+dirName = 'TPCF_param_exp/V3'
 
 os.makedirs(dirName)
 #specs_r = np.reshape(results_specs, (10,10,300,len(wave)))
 
-np.save('TPCF_param_exp/V2/nr_clouds', results_nr_clouds)
-np.save('TPCF_param_exp/V2/specs', results_specs)
-np.save('TPCF_param_exp/V2/alphas', results_alphas)
-np.save('TPCF_param_exp/V2/D', results_D)
-np.save('TPCF_param_exp/V2/vels', results_vels)
-np.save('TPCF_param_exp/V2/b', results_b)
-np.save('TPCF_param_exp/V2/inclis', results_inclis)
-np.save('TPCF_param_exp/V2/R_vir', results_R_vir)
-np.save('TPCF_param_exp/V2/Wr', results_Wr)
+np.save('TPCF_param_exp/V3/nr_clouds', results_nr_clouds)
+np.save('TPCF_param_exp/V3/specs', results_specs)
+np.save('TPCF_param_exp/V3/alphas', results_alphas)
+np.save('TPCF_param_exp/V3/D', results_D)
+np.save('TPCF_param_exp/V3/vels', results_vels)
+np.save('TPCF_param_exp/V3/b', results_b)
+np.save('TPCF_param_exp/V3/inclis', results_inclis)
+np.save('TPCF_param_exp/V3/R_vir', results_R_vir)
+np.save('TPCF_param_exp/V3/Wr', results_Wr)
 
-np.save('TPCF_param_exp/V2/tpcf_minor',results_tpcf_minor)
-np.save('TPCF_param_exp/V2/tpcf_major',results_tpcf_major)
+np.save('TPCF_param_exp/V3/tpcf_minor',results_tpcf_minor)
+np.save('TPCF_param_exp/V3/tpcf_major',results_tpcf_major)
 
 
 print(time.process_time() - start)
